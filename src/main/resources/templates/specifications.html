@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Specifications</title>
+</head>
+<body>
+    <h1>Specifications</h1>
+    <h3>New</h3>
+    <form th:method="post" th:action="@{'/specifications/post'}" th:object="${specification}">
+        <p>Specification Name (Formatted: MESSAGETYPE_VERSION_SPECNAME): <input type="text" th:field="*{specification_name}"/></p>
+        <button type ="submit">Create Specification</button>
+    </form>
+
+    <h3>Import</h3>
+    <form th:method="post" th:action="@{'/specifications/import'}" th:object="${importSpec}">
+        <p>Specification Name: <input type="text" th:field="*{specification_name}"/></p>
+        <p>Paste CSV here: <textarea th:field="*{csv}"></textarea></p>
+        <button type ="submit">Import</button>
+    </form>
+
+    <h3>List</h3>
+    <table>
+        <tr th:each = "specification : ${specifications}">
+            <td th:text="${specification.specification_name}"></td>
+            <td>
+                <form method="post" th:action="@{/specifications/view/{id} (id = ${specification.id})}">
+                    <button type ="submit" th:text="Edit"></button>
+                </form>
+            </td>
+            <td>
+                <form method="post" th:action="@{/specifications/delete/{id} (id = ${specification.id})}">
+                    <button type ="submit" th:text="Delete"></button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

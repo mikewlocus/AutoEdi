@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mass EDItor</title>
+</head>
+<body>
+    <div class="page-header">
+        <h1 th:align="center" text="Mass Editor"></h1>
+    </div>
+
+    <form action="/specifications">
+        <button class="navbar-button" type="submit">Back</button>
+    </form>
+
+    <h3>Enter Query</h3>
+    <form th:method="post" th:action="@{'/specifications/import'}">
+        <p>Query: <input type="text" /></p>
+        <button type ="submit">Run</button>
+    </form>
+</body>
+</html>

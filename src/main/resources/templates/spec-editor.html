@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Specification Editor</title>
+    <style>
+        td, tr {
+            padding: 4px;
+            border: 1px solid #707070;
+            vertical-align: top;
+        }
+        input {
+            background-color: transparent;
+            border-color: transparent;
+            outline: none;
+            box-shadow: none;
+        }
+        textarea {
+            background-color: transparent;
+            border-color: transparent;
+            outline: none;
+            box-shadow: none;
+            resize: none;
+            height: 18px;
+            overflow-y: auto;
+        }
+        .textarea-div {
+            font-family: inherit;
+            font-size: inherit;
+
+            display: block;
+            overflow: hidden;
+            min-height: 20px;
+            line-height: 20px;
+            height: 100%;
+        }
+        .navbar {
+            position: sticky;
+            top: 0;
+        }
+        .navbar-button {
+            float: left;
+            width: 150px;
+            height: 40px;
+        }
+        .page-header {
+            margin: auto;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 th:align="center" th:text="${specification.specification_name}"></h1>
+    </div>
+
+    <div class="navbar">
+        <form action="/specifications">
+            <button class="navbar-button" type="submit">Back</button>
+        </form>
+
+        <button class="navbar-button" type="submit" form="specRows">Save</button>
+
+        <form th:method="get" th:action="@{/specifications/view/{id}/generate (id=${specificationId})}">
+            <button class="navbar-button" type="submit">Generate</button>
+        </form>
+    </div>
+    <br>
+    <div>
+        <form id="specRows" method="post" th:action="@{/specifications/view/{id}/save (id=${specificationId})}" th:object="${specificationRows}" enctype="multipart/form-data">
+            <input type="hidden" name="rows" th:field="*{rows}" />
+            <table style="border-collapse: collapse;">
+                <tr th:each="row, count : *{rows}" th:style="${!#strings.isEmpty(row.seg_group)} ? 'background-color: #60E080' : (${!#strings.isEmpty(row.segment)} ? 'background-color: #B0C0FF' : ((${#strings.isEmpty(row.arsecode) and !#strings.isEmpty(row.element)}) ? 'background-color: #C0C0C0' : 'background-color: white'))">
+                    <td><input type="text" maxlength="3" style="width: 3ch" th:field="*{rows[__${count.index}__].seg_group}"/></td>
+                    <td><input type="text" maxlength="1" style="width: 1ch" th:field="*{rows[__${count.index}__].depth_5}"/></td>
+                    <td><input type="text" maxlength="1" style="width: 1ch" th:field="*{rows[__${count.index}__].depth_4}"/></td>
+                    <td><input type="text" maxlength="1" style="width: 1ch" th:field="*{rows[__${count.index}__].depth_3}"/></td>
+                    <td><input type="text" maxlength="1" style="width: 1ch" th:field="*{rows[__${count.index}__].depth_2}"/></td>
+                    <td><input type="text" maxlength="1" style="width: 1ch" th:field="*{rows[__${count.index}__].depth_1}"/></td>
+                    <td><input type="text" maxlength="3" style="width: 4ch" th:field="*{rows[__${count.index}__].segment}"/></td>
+                    <td><input type="text" maxlength="4" style="width: 4ch" th:field="*{rows[__${count.index}__].element}"/></td>
+                    <td><input type="text" maxlength="4" style="width: 4ch" th:field="*{rows[__${count.index}__].sub_element}"/></td>
+                    <td><input type="text" maxlength="1" style="width: 1ch" th:field="*{rows[__${count.index}__].component}"/></td>
+                    <td><input type="text" maxlength="100" style="width: 25ch" th:field="*{rows[__${count.index}__].field_name}"/></td>
+                    <!--<td><div class="textarea-div" role="textbox" style="width: 60ch" contenteditable="true" th:text="*{rows[__${count.index}__].arsecode}"></div></td>-->
+                    <td><textarea maxlength="8000" style="width: 60ch; overflow: auto;" onfocus='this.style.height = "";this.style.height = this.scrollHeight + "px"' oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{rows[__${count.index}__].arsecode}"}></textarea></td>
+                    <td><input type="text" maxlength="4" style="width: 4ch" th:field="*{rows[__${count.index}__].field_count}"/></td>
+                    <!--<td><div class="textarea-div" role="textbox" style="width: 40ch" contenteditable="true" th:text="*{rows[__${count.index}__].looping_logic}"></div></td>-->
+                    <td><textarea maxlength="200" style="width: 40ch" onfocus='this.style.height = "";this.style.height = this.scrollHeight + "px"' oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{rows[__${count.index}__].looping_logic}"></textarea></td>
+                    <!--<td><div class="textarea-div" role="textbox" style="width: 30ch" contenteditable="true" th:text="*{rows[__${count.index}__].comments}"></div></td>-->
+                    <td><textarea maxlength="1000" style="width: 30ch" onfocus='this.style.height = "";this.style.height = this.scrollHeight + "px"' oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{rows[__${count.index}__].comments}"></textarea></td>
+                    <td style="background-color: white; border-color: white"><button type="button" th:if="${!#strings.isEmpty(row.segment)}" th:attr="onclick=|duplicate('*{rows[__${count.index}__].id}', '${specificationId}')|">Duplicate</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <script>
+        form = document.getElementById("specRows");
+
+        function duplicate(rowId, specId) {
+            form.action = "/specifications/view/" + specId + "/duplicate/" + rowId;
+            form.submit();
+        }
+    </script>
+</body>
+</html>
