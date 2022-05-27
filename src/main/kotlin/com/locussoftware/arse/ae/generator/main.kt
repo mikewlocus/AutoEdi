@@ -193,7 +193,7 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
     }
 
     // Primary segment creation
-    if(currentLine[6] != "" && currentLine[11] != "DO NOT CREATE" && !currentLine[6].contains("SEGMENT")) {
+    if(currentLine[6] != "" && currentLine[11] != "DO NOT CREATE" && !currentLine[6].contains("SEG")) {
         // Skip over UN segments
         if(!isNotUNSegment(currentLine[6])) {
             return generateEdiCode(sheetLines.subList(nextNonBlankCell(sheetLines.subList(1, sheetLines.size), 6) + 1, sheetLines.size), fields, standard, currentCode, currentFunctions, currentVariable, currentSegmentVariable, currentGroup)
