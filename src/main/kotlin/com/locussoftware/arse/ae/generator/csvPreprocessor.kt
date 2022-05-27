@@ -12,8 +12,9 @@ tailrec fun preprocess(csvIn: List<String>, csvOut: List<String> = listOf()) : L
         return preprocess(newLineRemoved + csvIn.subList(2, csvIn.size), csvOut)
     }
 
-    return preprocess(csvIn.subList(1, csvIn.size), csvOut + listOf(if(splitLine.size >= 13 && splitLine[11].isNotEmpty() && splitLine[11][0] == '"') { splitLine.subList(0, 11).joinToString(",") + "," + splitLine[11].substring(1, splitLine[11].length - 1) + "," + splitLine.subList(12, splitLine.size).joinToString(",") } else { csvIn[0] }
-        .replace("\"\"", "\"")
+    return preprocess(csvIn.subList(1, csvIn.size),
+        csvOut +
+                listOf(csvIn[0]
         .replace("TRUE", "true")
         .replace("FALSE", "false")
         .replace("NULL", "null")))

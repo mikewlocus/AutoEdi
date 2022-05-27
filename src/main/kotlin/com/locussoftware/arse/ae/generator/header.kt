@@ -392,6 +392,10 @@ protected String getContTypeCDM(@Nonnull ContType contType) {
   return cdma.getSourceMappingOrDefault(ContType.class.getName(), contType.getEntityId(), contType.getIsoCode00B(), this.company);
 }
 
+protected String getPackTypeCDM(@Nonnull PackageType packageType) {
+  return cdma.getSourceMappingOrDefault(PackageType.class.getName(), packageType.getPackTypeId(), packageType.getPackageCode(), this.company);
+}
+
 protected String getVoyageCDM(@Nonnull Voyage voyage) {
   return cdma.getSourceMappingOrDefault(Voyage.class.getName(), voyage.getEntityId(), voyage.getVoyageNo(), this.company);
 }

@@ -5,6 +5,7 @@ import com.locussoftware.arse.ae.SpecificationRows
 import com.locussoftware.arse.ae.entities.Specification
 import com.locussoftware.arse.ae.entities.SpecificationRow
 import com.locussoftware.arse.ae.getRowsFromCsv
+import com.locussoftware.arse.ae.preprocess
 import com.locussoftware.arse.ae.services.SpecificationRowService
 import com.locussoftware.arse.ae.services.SpecificationService
 import org.springframework.core.io.FileSystemResource
@@ -116,7 +117,7 @@ class SpecificationController (val specificationService: SpecificationService,
 
         // Process CSV
         if(spec?.id != null) {
-            getRowsFromCsv(importSpec.csv.split("\n"), spec.id).forEach {
+            getRowsFromCsv(preprocess(importSpec.csv.split("\n")), spec.id).forEach {
                 specificationRowService.post(it)
             }
         }
