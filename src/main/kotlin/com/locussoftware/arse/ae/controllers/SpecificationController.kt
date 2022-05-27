@@ -25,11 +25,18 @@ import java.io.FileInputStream
 import java.io.InputStream
 import javax.servlet.http.HttpServletResponse
 
-
+/**
+ * Controller class for the specifications list and specification editor.
+ *
+ * @author Mike Wayne
+ */
 @Controller
 class SpecificationController (val specificationService: SpecificationService,
                                val specificationRowService: SpecificationRowService) {
 
+    /**
+     * Initialises the web data binder to allow for a higher number of parameters to be posted.
+     */
     @InitBinder
     fun initBinder(binder: WebDataBinder) {
         binder.autoGrowCollectionLimit = 2000000000
@@ -40,14 +47,26 @@ class SpecificationController (val specificationService: SpecificationService,
         return "/index"
     }
 
+    /**
+     * Initialises the specifications list, along with model objects for creating new specifications.
+     */
     @GetMapping("/specifications")
     fun specifications(model: Model) : String {
+        // Find and display all specifications
         model["specifications"] = specificationService.findSpecifications()
+        // Prepare blank specification object for new specifications
         model["specification"] = Specification(null, "")
+        // Prepare specification object for import
         model["importSpec"] = ImportSpecification("", "")
+
         return "/specifications"
     }
 
+    /**
+     * Finds and displays the rows of a specification.
+     *
+     * @param id The ID of the specification to be displayed, passed through as a path variable.
+     */
     @RequestMapping("/specifications/view/{id}")
     fun specificationRows(@PathVariable id: String, model: Model) : String {
         model["specificationRows"] = SpecificationRows(specificationRowService.findSpecificationRows(id).sortedBy { it.row_index })
@@ -56,12 +75,20 @@ class SpecificationController (val specificationService: SpecificationService,
         return "/spec-editor"
     }
 
+    /**
+     * Deletes a specification entity, along with all of its rows.
+     *
+     * @param id The ID of the specification to be deleted, passed through as a path variable.
+     */
     @RequestMapping("/specifications/delete/{id}")
     fun specificationRows(@PathVariable id: String) : String {
+        // Find the specification using the ID
         val specToDelete = specificationService.findByIdOrNull(id)
 
         if(specToDelete != null) {
+            // Delete all rows in the specification if found
             specificationRowService.deleteAllRowsInSpecification(id)
+            // Delete the specification itself
             specificationService.delete(specToDelete)
         }
 
@@ -74,6 +101,11 @@ class SpecificationController (val specificationService: SpecificationService,
         return "redirect:/specifications"
     }
 
+    /**
+     * Creates a specification from a given CSV file.
+     *
+     * @param importSpec The model attribute containing the user-provided specification CSV and name to be imported.
+     */
     @PostMapping("/specifications/import")
     fun importSpecification(@ModelAttribute importSpec: ImportSpecification) : String {
 
@@ -118,8 +150,12 @@ class SpecificationController (val specificationService: SpecificationService,
     }
 
     /**
+     * Generates and downloads a Java file from the specification.
+     *
      * Gets all of the specification rows for the specification, converts them into a CSV string, then generates and
      * downloads a Java file.
+     *
+     * @param id The ID of the specification being generated.
      */
     @GetMapping("/specifications/view/{id}/generate", produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
     @ResponseBody
@@ -158,13 +194,21 @@ class SpecificationController (val specificationService: SpecificationService,
         return FileSystemResource(filename)
     }
 
+    /**
+     * Saves all of the rows in a specification.
+     *
+     * @param specificationRows All of the rows in a specification, passed through as a model attribute.
+     * @param id The ID of the specification being saved.
+     */
     @RequestMapping("/specifications/view/{id}/save")
     fun saveSpecification(@ModelAttribute specificationRows: SpecificationRows, @PathVariable id: String) : String {
 
+        // Save each row
         specificationRows.rows.forEach {
             specificationRowService.post(it)
         }
 
+        // Redirect back to the specification
         return "redirect:/specifications/view/$id"
     }
 
