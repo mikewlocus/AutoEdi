@@ -1,6 +1,7 @@
 package com.locussoftware.arse.ae.controllers
 
 import com.locussoftware.arse.ae.MassEditQuery
+import com.locussoftware.arse.ae.services.MassEditorService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 
 @Controller
-class MassEditorController {
+class MassEditorController(val massEditorService: MassEditorService) {
 
     /**
      * Initialises the model objects for display on the mass editor UI
@@ -46,14 +47,13 @@ class MassEditorController {
     }
 
     /**
-     * Handles query submissions from the UI.
+     * Handles query submissions from the UI, by triggering a mass edit query in the service layer.
      *
      * @param massEditQuery The model attribute containing the query data entered and submitted by the user.
      */
     @PostMapping("/mass-editor/query")
     fun massEditorQuery(@ModelAttribute massEditQuery: MassEditQuery) : String {
-
-
+        massEditorService.performMassEdit(massEditQuery)
 
         return "redirect:/mass-editor"
     }
