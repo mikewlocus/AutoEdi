@@ -15,7 +15,14 @@
 
     <h3>Enter Query</h3>
     <form th:method="post" th:action="@{'/specifications/import'}">
+        <!-- Query limitations -->
+        <select id="messageTypeSelect">
+            <option th:each="typeLim : ${typeLimitations}" th:value="${typeLim}" th:text="${typeLim}"></option>
+        </select>
+
+        <!-- Query field -->
         <p>Query: <input type="text" /></p>
+
         <button type ="submit">Run</button>
     </form>
 </body>
