@@ -6,6 +6,11 @@
 </head>
 <body>
     <h1>Specifications</h1>
+
+    <form action="/">
+        <button class="navbar-button" type="submit">Back</button>
+    </form>
+
     <h3>New</h3>
     <form th:method="post" th:action="@{'/specifications/post'}" th:object="${specification}">
         <p>Specification Name (Formatted: MESSAGETYPE_VERSION_SPECNAME): <input type="text" th:field="*{specification_name}"/></p>
