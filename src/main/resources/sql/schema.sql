@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS SPECIFICATION_ROWS (
 );
 
 CREATE TABLE IF NOT EXISTS MASS_EDIT_QUERIES (
-    id                  VARCHAR(60)         DEFAULT RANDOM_UUID()           PRIMARY KEY,
+    id                  VARCHAR(60),        DEFAULT RANDOM_UUID()           PRIMARY KEY,
     type_lim            VARCHAR(20),
     version_lim         VARCHAR(20),
     seg_group_in        VARCHAR(4),
