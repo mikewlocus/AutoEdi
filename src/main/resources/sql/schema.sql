@@ -24,3 +24,27 @@ CREATE TABLE IF NOT EXISTS SPECIFICATION_ROWS (
     row_index           INTEGER(8),
     CONSTRAINT FK_specification_rows_specification FOREIGN KEY (specification_id) REFERENCES SPECIFICATIONS(id)
 );
+
+CREATE TABLE IF NOT EXISTS MASS_EDIT_QUERIES (
+    id                  VARCHAR(60)         DEFAULT RANDOM_UUID()           PRIMARY KEY,
+    type_lim            VARCHAR(20),
+    version_lim         VARCHAR(20),
+    seg_group_in        VARCHAR(4),
+    segment_in          VARCHAR(3),
+    element_in          VARCHAR(4),
+    sub_element_in      VARCHAR(4),
+    component_in        VARCHAR(2),
+    field_name_in       VARCHAR(100),
+    arsecode_in         VARCHAR(8000),
+    field_count_in      VARCHAR(4),
+    looping_logic_in    VARCHAR(200),
+    seg_group_out       VARCHAR(4),
+    segment_out         VARCHAR(3),
+    element_out         VARCHAR(4),
+    sub_element_out     VARCHAR(4),
+    component_out       VARCHAR(2),
+    field_name_out      VARCHAR(100),
+    arsecode_out        VARCHAR(8000),
+    field_count_out     VARCHAR(4),
+    looping_logic_out   VARCHAR(200),
+);

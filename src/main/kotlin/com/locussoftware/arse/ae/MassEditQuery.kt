@@ -1,6 +1,7 @@
 package com.locussoftware.arse.ae
 
-data class MassEditQuery(var typeLim: String,
+data class MassEditQuery(var id: String?,
+                         var typeLim: String,
                          var versionLim: String,
                          var segGroupIn: String,
                          var segCodeIn: String,
