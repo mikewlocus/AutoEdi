@@ -14,15 +14,15 @@
     </form>
 
     <h3>Enter Query</h3>
-    <form th:method="post" th:action="@{'/specifications/import'}">
+    <form th:method="post" th:action="@{'/specifications/import'}" th:object="${massEditQuery}">
         <!-- Query limitations -->
         <h4>Limit to messages type and version: </h4>
 
-        <select id="messageTypeSelect">
+        <select id="messageTypeSelect" th:field="*{typeLim}">
             <option th:each="typeLim : ${typeLimitations}" th:value="${typeLim}" th:text="${typeLim}"></option>
         </select>
 
-        <select id="versionSelect">
+        <select id="versionSelect" th:field="*{versionLim}">
             <option th:each="versionLim : ${versionLimitations}" th:value="${versionLim}" th:text="${versionLim}"></option>
         </select>
 
@@ -45,27 +45,27 @@
             </tr>
             <tr>
                 <td>Input:</td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="2" /></td>
-                <td><input type="text" maxlength="30" /></td>
-                <td><input type="text" maxlength="100" /></td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="100" /></td>
+                <td><input type="text" maxlength="4" th:field="*{segGroupIn}"/></td>
+                <td><input type="text" maxlength="4" th:field="*{segCodeIn}"/></td>
+                <td><input type="text" maxlength="4" th:field="*{elementCodeIn}"/></td>
+                <td><input type="text" maxlength="4" th:field="*{subElementCodeIn}"/></td>
+                <td><input type="text" maxlength="2" th:field="*{componentNumberIn}"/></td>
+                <td><input type="text" maxlength="30" th:field="*{fieldNameIn}"/></td>
+                <td><input type="text" maxlength="100" th:field="*{arseCodeIn}"/></td>
+                <td><input type="text" maxlength="4" th:field="*{numberIn}"/></td>
+                <td><input type="text" maxlength="100" th:field="*{loopingLogicIn}"/></td>
             </tr>
             <tr>
                 <td>Output:</td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="2" /></td>
-                <td><input type="text" maxlength="30" /></td>
-                <td><input type="text" maxlength="100" /></td>
-                <td><input type="text" maxlength="4" /></td>
-                <td><input type="text" maxlength="100" /></td>
+                <td><input type="text" maxlength="4" th:field="*{segGroupOut}"/></td>
+                <td><input type="text" maxlength="4" th:field="*{segCodeOut}"/></td>
+                <td><input type="text" maxlength="4" th:field="*{elementCodeOut}"/></td>
+                <td><input type="text" maxlength="4" th:field="*{subElementCodeOut}"/></td>
+                <td><input type="text" maxlength="2" th:field="*{componentNumberOut}"/></td>
+                <td><input type="text" maxlength="30" th:field="*{fieldNameOut}"/></td>
+                <td><input type="text" maxlength="100" th:field="*{arseCodeOut}"/></td>
+                <td><input type="text" maxlength="4" th:field="*{numberOut}"/></td>
+                <td><input type="text" maxlength="100" th:field="*{loopingLogicOut}"/></td>
             </tr>
         </table>
 

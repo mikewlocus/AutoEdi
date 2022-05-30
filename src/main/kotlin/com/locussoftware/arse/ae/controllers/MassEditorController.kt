@@ -1,5 +1,6 @@
 package com.locussoftware.arse.ae.controllers
 
+import com.locussoftware.arse.ae.MassEditQuery
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -17,6 +18,27 @@ class MassEditorController {
         model["typeLimitations"] = listOf("None", "COPARN", "COPRAR", "CUSCAR", "IFTMBF", "IFTMIN")
         // Initialise the version limitations
         model["versionLimitations"] = listOf("None", "D95A", "D95B", "D99A", "D99B", "D00B")
+        // Default query object for storing query values
+        model["massEditQuery"] = MassEditQuery("None",
+            "None",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "")
 
         return "/mass-editor"
     }
