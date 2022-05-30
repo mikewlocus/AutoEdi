@@ -67,15 +67,15 @@ class MassEditorService (val specificationService: SpecificationService,
             // Loop through all rows in specification
             for(specRow in specRows) {
                 // Check the query criteria matches the row, or is blank (and therefore considered irrelevant)
-                if((massEditQuery.segGroupIn.isBlank() || massEditQuery.segGroupIn == specRow.seg_group)
-                    && (massEditQuery.segCodeIn.isBlank() || massEditQuery.segCodeIn == specRow.segment)
-                    && (massEditQuery.elementCodeIn.isBlank() || massEditQuery.elementCodeIn == specRow.element)
-                    && (massEditQuery.subElementCodeIn.isBlank() || massEditQuery.subElementCodeIn == specRow.sub_element)
-                    && (massEditQuery.fieldNameIn.isBlank() || massEditQuery.fieldNameIn == specRow.field_name)
-                    && (massEditQuery.componentNumberIn.isBlank() || massEditQuery.componentNumberIn == specRow.component)
-                    && (massEditQuery.arseCodeIn.isBlank() || massEditQuery.arseCodeIn == specRow.arsecode)
-                    && (massEditQuery.numberIn.isBlank() || massEditQuery.numberIn == specRow.field_count)
-                    && (massEditQuery.loopingLogicIn.isBlank() || massEditQuery.loopingLogicIn == specRow.looping_logic)) {
+                if((massEditQuery.seg_group_in.isBlank() || massEditQuery.seg_group_in == specRow.seg_group)
+                    && (massEditQuery.segment_in.isBlank() || massEditQuery.segment_in == specRow.segment)
+                    && (massEditQuery.element_in.isBlank() || massEditQuery.element_in == specRow.element)
+                    && (massEditQuery.sub_element_in.isBlank() || massEditQuery.sub_element_in == specRow.sub_element)
+                    && (massEditQuery.field_name_in.isBlank() || massEditQuery.field_name_in == specRow.field_name)
+                    && (massEditQuery.component_in.isBlank() || massEditQuery.component_in == specRow.component)
+                    && (massEditQuery.arsecode_in.isBlank() || massEditQuery.arsecode_in == specRow.arsecode)
+                    && (massEditQuery.field_count_in.isBlank() || massEditQuery.field_count_in == specRow.field_count)
+                    && (massEditQuery.looping_logic_in.isBlank() || massEditQuery.looping_logic_in == specRow.looping_logic)) {
                     relevantRows.add(specRow)
                 }
             }
@@ -93,54 +93,54 @@ class MassEditorService (val specificationService: SpecificationService,
      * @param massEditQuery The query object, holding both the search criteria and the target values.
      */
     fun performMassEdit(massEditQuery: MassEditQuery) {
-        val relevantSpecs = getSpecifications(massEditQuery.typeLim, massEditQuery.versionLim)
+        val relevantSpecs = getSpecifications(massEditQuery.type_lim, massEditQuery.version_lim)
         val relevantRows = getRelevantRows(relevantSpecs, massEditQuery)
 
         // Loop through rows relevant to the query
         for(row in relevantRows) {
             // Update the segment group
-            if(massEditQuery.segGroupIn.isNotBlank() || massEditQuery.segGroupOut.isNotBlank()) {
-                row.seg_group = massEditQuery.segGroupOut
+            if(massEditQuery.seg_group_in.isNotBlank() || massEditQuery.seg_group_out.isNotBlank()) {
+                row.seg_group = massEditQuery.seg_group_out
             }
 
             // Update the segment code
-            if(massEditQuery.segCodeIn.isNotBlank() || massEditQuery.segCodeOut.isNotBlank()) {
-                row.segment = massEditQuery.segCodeOut
+            if(massEditQuery.segment_in.isNotBlank() || massEditQuery.segment_out.isNotBlank()) {
+                row.segment = massEditQuery.segment_out
             }
 
             // Update the element code
-            if(massEditQuery.elementCodeIn.isNotBlank() || massEditQuery.elementCodeOut.isNotBlank()) {
-                row.element = massEditQuery.elementCodeOut
+            if(massEditQuery.element_in.isNotBlank() || massEditQuery.element_out.isNotBlank()) {
+                row.element = massEditQuery.element_out
             }
 
             // Update the sub-element code
-            if(massEditQuery.subElementCodeIn.isNotBlank() || massEditQuery.subElementCodeOut.isNotBlank()) {
-                row.sub_element = massEditQuery.subElementCodeOut
+            if(massEditQuery.sub_element_in.isNotBlank() || massEditQuery.sub_element_out.isNotBlank()) {
+                row.sub_element = massEditQuery.sub_element_out
             }
 
             // Update the component number
-            if(massEditQuery.componentNumberIn.isNotBlank() || massEditQuery.componentNumberOut.isNotBlank()) {
-                row.component = massEditQuery.componentNumberOut
+            if(massEditQuery.component_in.isNotBlank() || massEditQuery.component_out.isNotBlank()) {
+                row.component = massEditQuery.component_out
             }
 
             // Update the field name
-            if(massEditQuery.fieldNameIn.isNotBlank() || massEditQuery.fieldNameOut.isNotBlank()) {
-                row.field_name = massEditQuery.fieldNameOut
+            if(massEditQuery.field_name_in.isNotBlank() || massEditQuery.field_name_out.isNotBlank()) {
+                row.field_name = massEditQuery.field_name_out
             }
 
             // Update the ArseCode
-            if(massEditQuery.arseCodeIn.isNotBlank() || massEditQuery.arseCodeOut.isNotBlank()) {
-                row.arsecode = massEditQuery.arseCodeOut
+            if(massEditQuery.arsecode_in.isNotBlank() || massEditQuery.arsecode_out.isNotBlank()) {
+                row.arsecode = massEditQuery.arsecode_out
             }
 
             // Update the field count
-            if(massEditQuery.numberIn.isNotBlank() || massEditQuery.numberOut.isNotBlank()) {
-                row.field_count = massEditQuery.numberOut
+            if(massEditQuery.field_count_in.isNotBlank() || massEditQuery.field_count_out.isNotBlank()) {
+                row.field_count = massEditQuery.field_count_out
             }
 
             // Update the looping logic
-            if(massEditQuery.loopingLogicIn.isNotBlank() || massEditQuery.loopingLogicOut.isNotBlank()) {
-                row.looping_logic = massEditQuery.loopingLogicOut
+            if(massEditQuery.looping_logic_in.isNotBlank() || massEditQuery.looping_logic_out.isNotBlank()) {
+                row.looping_logic = massEditQuery.looping_logic_out
             }
 
             // Save the update
