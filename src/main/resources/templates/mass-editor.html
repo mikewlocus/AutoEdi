@@ -18,11 +18,11 @@
         <!-- Query limitations -->
         <h4>Limit to messages type and version: </h4>
 
-        <select id="messageTypeSelect" th:field="*{typeLim}">
+        <select id="messageTypeSelect" th:field="*{type_lim}">
             <option th:each="typeLim : ${typeLimitations}" th:value="${typeLim}" th:text="${typeLim}"></option>
         </select>
 
-        <select id="versionSelect" th:field="*{versionLim}">
+        <select id="versionSelect" th:field="*{version_lim}">
             <option th:each="versionLim : ${versionLimitations}" th:value="${versionLim}" th:text="${versionLim}"></option>
         </select>
 
@@ -45,27 +45,27 @@
             </tr>
             <tr>
                 <td>Input:</td>
-                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{segGroupIn}"/></td>
-                <td><input type="text" style="width: 5ch" maxlength="3" th:field="*{segCodeIn}"/></td>
-                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{elementCodeIn}"/></td>
-                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{subElementCodeIn}"/></td>
-                <td><input type="text" style="width: 2ch" maxlength="1" th:field="*{componentNumberIn}"/></td>
-                <td><input type="text" style="width: 30ch" maxlength="30" th:field="*{fieldNameIn}"/></td>
-                <td><textarea type="text" style="width: 30ch; height: 15px" maxlength="8000" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{arseCodeIn}"></textarea></td>
-                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{numberIn}"/></td>
-                <td><input type="text" style="width: 30ch" maxlength="100" th:field="*{loopingLogicIn}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{seg_group_in}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="3" th:field="*{segment_in}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{element_in}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{sub_element_in}"/></td>
+                <td><input type="text" style="width: 2ch" maxlength="1" th:field="*{component_in}"/></td>
+                <td><input type="text" style="width: 30ch" maxlength="30" th:field="*{field_name_in}"/></td>
+                <td><textarea type="text" style="width: 30ch; height: 15px" maxlength="8000" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{arsecode_in}"></textarea></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{field_count_in}"/></td>
+                <td><input type="text" style="width: 30ch" maxlength="100" th:field="*{looping_logic_in}"/></td>
             </tr>
             <tr>
                 <td>Output:</td>
-                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{segGroupOut}"/></td>
-                <td><input type="text" style="width: 5ch" maxlength="3" th:field="*{segCodeOut}"/></td>
-                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{elementCodeOut}"/></td>
-                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{subElementCodeOut}"/></td>
-                <td><input type="text" style="width: 2ch" maxlength="1" th:field="*{componentNumberOut}"/></td>
-                <td><input type="text" style="width: 30ch" maxlength="30" th:field="*{fieldNameOut}"/></td>
-                <td><textarea type="text" style="width: 30ch; height: 15px" maxlength="8000" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{arseCodeOut}"></textarea></td>
-                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{numberOut}"/></td>
-                <td><input type="text" style="width: 30ch" maxlength="100" th:field="*{loopingLogicOut}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{seg_group_out}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="3" th:field="*{segment_out}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{element_out}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{sub_element_out}"/></td>
+                <td><input type="text" style="width: 2ch" maxlength="1" th:field="*{component_out}"/></td>
+                <td><input type="text" style="width: 30ch" maxlength="30" th:field="*{field_name_out}"/></td>
+                <td><textarea type="text" style="width: 30ch; height: 15px" maxlength="8000" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{arsecode_out}"></textarea></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{field_count_out}"/></td>
+                <td><input type="text" style="width: 30ch" maxlength="100" th:field="*{looping_logic_out}"/></td>
             </tr>
         </table>
 
