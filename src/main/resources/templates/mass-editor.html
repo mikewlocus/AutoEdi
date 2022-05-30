@@ -37,7 +37,7 @@
                 <td><p>Segment Code</p></td>
                 <td><p>Element Code</p></td>
                 <td><p>Sub-Element Code</p></td>
-                <td><p>Component Number</p></td>
+                <td><p>Component</p></td>
                 <td><p>Field name</p></td>
                 <td><p>ArseCode</p></td>
                 <td><p>Number</p></td>
@@ -45,27 +45,27 @@
             </tr>
             <tr>
                 <td>Input:</td>
-                <td><input type="text" maxlength="4" th:field="*{segGroupIn}"/></td>
-                <td><input type="text" maxlength="3" th:field="*{segCodeIn}"/></td>
-                <td><input type="text" maxlength="4" th:field="*{elementCodeIn}"/></td>
-                <td><input type="text" maxlength="4" th:field="*{subElementCodeIn}"/></td>
-                <td><input type="text" maxlength="1" th:field="*{componentNumberIn}"/></td>
-                <td><input type="text" maxlength="30" th:field="*{fieldNameIn}"/></td>
-                <td><input type="text" maxlength="100" th:field="*{arseCodeIn}"/></td>
-                <td><input type="text" maxlength="4" th:field="*{numberIn}"/></td>
-                <td><input type="text" maxlength="100" th:field="*{loopingLogicIn}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{segGroupIn}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="3" th:field="*{segCodeIn}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{elementCodeIn}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{subElementCodeIn}"/></td>
+                <td><input type="text" style="width: 2ch" maxlength="1" th:field="*{componentNumberIn}"/></td>
+                <td><input type="text" style="width: 30ch" maxlength="30" th:field="*{fieldNameIn}"/></td>
+                <td><textarea type="text" style="width: 30ch; height: 15px" maxlength="8000" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{arseCodeIn}"></textarea></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{numberIn}"/></td>
+                <td><input type="text" style="width: 30ch" maxlength="100" th:field="*{loopingLogicIn}"/></td>
             </tr>
             <tr>
                 <td>Output:</td>
-                <td><input type="text" maxlength="4" th:field="*{segGroupOut}"/></td>
-                <td><input type="text" maxlength="3" th:field="*{segCodeOut}"/></td>
-                <td><input type="text" maxlength="4" th:field="*{elementCodeOut}"/></td>
-                <td><input type="text" maxlength="4" th:field="*{subElementCodeOut}"/></td>
-                <td><input type="text" maxlength="1" th:field="*{componentNumberOut}"/></td>
-                <td><input type="text" maxlength="30" th:field="*{fieldNameOut}"/></td>
-                <td><input type="text" maxlength="100" th:field="*{arseCodeOut}"/></td>
-                <td><input type="text" maxlength="4" th:field="*{numberOut}"/></td>
-                <td><input type="text" maxlength="100" th:field="*{loopingLogicOut}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{segGroupOut}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="3" th:field="*{segCodeOut}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{elementCodeOut}"/></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{subElementCodeOut}"/></td>
+                <td><input type="text" style="width: 2ch" maxlength="1" th:field="*{componentNumberOut}"/></td>
+                <td><input type="text" style="width: 30ch" maxlength="30" th:field="*{fieldNameOut}"/></td>
+                <td><textarea type="text" style="width: 30ch; height: 15px" maxlength="8000" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{arseCodeOut}"></textarea></td>
+                <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{numberOut}"/></td>
+                <td><input type="text" style="width: 30ch" maxlength="100" th:field="*{loopingLogicOut}"/></td>
             </tr>
         </table>
 
