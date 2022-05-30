@@ -46,5 +46,5 @@ CREATE TABLE IF NOT EXISTS MASS_EDIT_QUERIES (
     field_name_out      VARCHAR(100),
     arsecode_out        VARCHAR(8000),
     field_count_out     VARCHAR(4),
-    looping_logic_out   VARCHAR(200),
+    looping_logic_out   VARCHAR(200)
 );
