@@ -3,6 +3,7 @@ package com.locussoftware.arse.ae.services
 import com.locussoftware.arse.ae.MassEditQuery
 import com.locussoftware.arse.ae.entities.Specification
 import com.locussoftware.arse.ae.entities.SpecificationRow
+import com.locussoftware.arse.ae.repositories.MassEditQueryRepository
 import org.springframework.stereotype.Service
 
 private const val MESSAGE_TYPE_INDEX = 0
@@ -15,7 +16,8 @@ private const val SPECIFICATION_NAME_MIN_SIZE = 2
  */
 @Service
 class MassEditorService (val specificationService: SpecificationService,
-                         val specificationRowService: SpecificationRowService) {
+                         val specificationRowService: SpecificationRowService,
+                         val massEditQueryRepository: MassEditQueryRepository) {
 
     /**
      * Gets a list of specifications which match the given message type and version.
@@ -146,6 +148,12 @@ class MassEditorService (val specificationService: SpecificationService,
             // Save the update
             specificationRowService.post(row)
         }
+
+        massEditQueryRepository.save(massEditQuery)
+    }
+
+    fun getQueryHistory() : List<MassEditQuery> {
+        return massEditQueryRepository.findMassEditQueries()
     }
 
 }

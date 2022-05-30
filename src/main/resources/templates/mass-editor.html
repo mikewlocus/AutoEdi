@@ -71,5 +71,12 @@
 
         <button type ="submit">Run</button>
     </form>
+
+    <h3>Query History</h3>
+    <table>
+        <tr th:each="query : ${massEditQueries}">
+            <td th:text="*{id}"></td>
+        </tr>
+    </table>
 </body>
 </html>

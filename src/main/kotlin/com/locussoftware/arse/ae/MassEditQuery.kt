@@ -1,9 +1,10 @@
 package com.locussoftware.arse.ae
 
+import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("MASS_EDIT_QUERIES")
-data class MassEditQuery(var id: String?,
+data class MassEditQuery(@Id var id: String?,
                          var type_lim: String,
                          var version_lim: String,
                          var seg_group_in: String,

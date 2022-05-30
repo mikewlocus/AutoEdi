@@ -43,6 +43,8 @@ class MassEditorController(val massEditorService: MassEditorService) {
             "",
             "",
             "")
+        // Initialise query history from repository
+        model["massEditQueries"] = massEditorService.getQueryHistory()
 
         return "/mass-editor"
     }
