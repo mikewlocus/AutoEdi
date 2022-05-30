@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
 
 @Controller
 class MassEditorController {
@@ -41,6 +43,19 @@ class MassEditorController {
             "")
 
         return "/mass-editor"
+    }
+
+    /**
+     * Handles query submissions from the UI.
+     *
+     * @param massEditQuery The model attribute containing the query data entered and submitted by the user.
+     */
+    @PostMapping("/mass-editor/query")
+    fun massEditorQuery(@ModelAttribute massEditQuery: MassEditQuery) : String {
+
+
+
+        return "redirect:/mass-editor"
     }
 
 }
