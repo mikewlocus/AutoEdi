@@ -14,7 +14,9 @@ class MassEditorController {
     @GetMapping("/mass-editor")
     fun massEditor(model: Model) : String {
         // Initialise the type limitations
-        model["typeLimitations"] = listOf("COPARN", "COPRAR", "CUSCAR", "IFTMBF", "IFTMIN")
+        model["typeLimitations"] = listOf("None", "COPARN", "COPRAR", "CUSCAR", "IFTMBF", "IFTMIN")
+        // Initialise the version limitations
+        model["versionLimitations"] = listOf("None", "D95A", "D95B", "D99A", "D99B", "D00B")
 
         return "/mass-editor"
     }

@@ -16,12 +16,58 @@
     <h3>Enter Query</h3>
     <form th:method="post" th:action="@{'/specifications/import'}">
         <!-- Query limitations -->
+        <h4>Limit to messages type and version: </h4>
+
         <select id="messageTypeSelect">
             <option th:each="typeLim : ${typeLimitations}" th:value="${typeLim}" th:text="${typeLim}"></option>
         </select>
 
+        <select id="versionSelect">
+            <option th:each="versionLim : ${versionLimitations}" th:value="${versionLim}" th:text="${versionLim}"></option>
+        </select>
+
+        <br>
+
         <!-- Query field -->
-        <p>Query: <input type="text" /></p>
+        <h4>Query:</h4>
+        <table>
+            <tr>
+                <td></td>
+                <td><p>Segment Group</p></td>
+                <td><p>Segment Code</p></td>
+                <td><p>Element Code</p></td>
+                <td><p>Sub-Element Code</p></td>
+                <td><p>Component Number</p></td>
+                <td><p>Field name</p></td>
+                <td><p>ArseCode</p></td>
+                <td><p>Number</p></td>
+                <td><p>Looping Logic</p></td>
+            </tr>
+            <tr>
+                <td>Input:</td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="2" /></td>
+                <td><input type="text" maxlength="30" /></td>
+                <td><input type="text" maxlength="100" /></td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="100" /></td>
+            </tr>
+            <tr>
+                <td>Output:</td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="2" /></td>
+                <td><input type="text" maxlength="30" /></td>
+                <td><input type="text" maxlength="100" /></td>
+                <td><input type="text" maxlength="4" /></td>
+                <td><input type="text" maxlength="100" /></td>
+            </tr>
+        </table>
 
         <button type ="submit">Run</button>
     </form>
