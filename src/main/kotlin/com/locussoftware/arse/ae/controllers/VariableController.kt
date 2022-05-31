@@ -1,5 +1,6 @@
 package com.locussoftware.arse.ae.controllers
 
+import com.locussoftware.arse.ae.VariableRows
 import com.locussoftware.arse.ae.services.VariableService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -11,7 +12,7 @@ class VariableController(val variableService: VariableService) {
 
     @GetMapping("/variables")
     fun variables(model: Model) : String {
-        model["variables"] = variableService.getVariables()
+        model["variableRows"] = VariableRows(variableService.getVariables())
 
         return "/variables"
     }

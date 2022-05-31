@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Variables</title>
 </head>
 <body>
+    <div class="page-header">
+        <h1 th:align="center">Variables</h1>
+    </div>
+
+    <div class="navbar">
+        <form action="/">
+            <button class="navbar-button" type="submit">Back</button>
+        </form>
+
+        <button class="navbar-button" type="submit" form="variableForm">Save</button>
+    </div>
+
+    <div>
+        <form id="variableForm" method="post" th:action="@{/variables/save}" th:object="${variableRows}" enctype="multipart/form-data">
+            <input type="hidden" name="rows" th:field="*{variables}" />
+            <table style="border-collapse: collapse;">
+                <tr th:each="variable, count : *{variables}">
+                    <td><input type="text" maxlength="200" style="width: 40ch" th:field="*{variables[__${count.index}__].description}"/></td>
+                    <td><input type="text" maxlength="100" style="width: 40ch" th:field="*{variables[__${count.index}__].var_name}"/></td>
+                    <td><input type="text" maxlength="300" style="width: 60ch" th:field="*{variables[__${count.index}__].code}"/></td>
+                    <td><input type="text" maxlength="50" style="width: 30ch" th:field="*{variables[__${count.index}__].var_type}"/></td>
+                    <td><input type="text" maxlength="25" style="width: 30ch" th:field="*{variables[__${count.index}__].null_check}"/></td>
+                    <td><input type="text" maxlength="100" style="width: 30ch" th:field="*{variables[__${count.index}__].var_params}"/></td>
+                    <td><input type="text" maxlength="200" style="width: 30ch" th:field="*{variables[__${count.index}__].required_params}"/></td>
+                    <td><input type="text" maxlength="300" style="width: 60ch" th:field="*{variables[__${count.index}__].additional_checks}"/></td>
+                </tr>
+            </table>
+        </form>
+    </div>
 
 </body>
 </html>
