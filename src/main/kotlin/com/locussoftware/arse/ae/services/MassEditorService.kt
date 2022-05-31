@@ -1,6 +1,6 @@
 package com.locussoftware.arse.ae.services
 
-import com.locussoftware.arse.ae.MassEditQuery
+import com.locussoftware.arse.ae.entities.MassEditQuery
 import com.locussoftware.arse.ae.entities.Specification
 import com.locussoftware.arse.ae.entities.SpecificationRow
 import com.locussoftware.arse.ae.repositories.MassEditQueryRepository

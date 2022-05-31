@@ -1,6 +1,6 @@
 package com.locussoftware.arse.ae.controllers
 
-import com.locussoftware.arse.ae.MassEditQuery
+import com.locussoftware.arse.ae.entities.MassEditQuery
 import com.locussoftware.arse.ae.services.MassEditorService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
