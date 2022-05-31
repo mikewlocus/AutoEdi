@@ -74,8 +74,32 @@
 
     <h3>Query History</h3>
     <table>
+        <tr>
+            <td></td>
+            <td><p>Message Type Restriction</p></td>
+            <td><p>Version Restriction</p></td>
+            <td><p>Segment Group</p></td>
+            <td><p>Segment Code</p></td>
+            <td><p>Element Code</p></td>
+            <td><p>Sub-Element Code</p></td>
+            <td><p>Component</p></td>
+            <td><p>Field name</p></td>
+            <td><p>ArseCode</p></td>
+            <td><p>Number</p></td>
+            <td><p>Looping Logic</p></td>
+        </tr>
         <tr th:each="query : ${massEditQueries}">
-            <td th:text="*{id}"></td>
+            <td th:text="${query.type_lim}"></td>
+            <td th:text="${query.version_lim}"></td>
+            <td th:text="'&quot' + ${query.seg_group_in} + '&quot -> &quot' + ${query.seg_group_out} + '&quot'"></td>
+            <td th:text="'&quot' + ${query.segment_in} + '&quot -> &quot' + ${query.segment_out} + '&quot'"></td>
+            <td th:text="'&quot' + ${query.element_in} + '&quot -> &quot' + ${query.element_out} + '&quot'"></td>
+            <td th:text="'&quot' + ${query.sub_element_in} + '&quot -> &quot' + ${query.sub_element_out} + '&quot'"></td>
+            <td th:text="'&quot' + ${query.component_in} + '&quot -> &quot' + ${query.component_out} + '&quot'"></td>
+            <td th:text="'&quot' + ${query.field_name_in} + '&quot -> &quot' + ${query.field_name_out} + '&quot'"></td>
+            <td th:text="'&quot' + ${query.arsecode_in} + '&quot -> &quot' + ${query.arsecode_out} + '&quot'"></td>
+            <td th:text="'&quot' + ${query.field_count_in} + '&quot -> &quot' + ${query.field_count_out} + '&quot'"></td>
+            <td th:text="'&quot' + ${query.looping_logic_in} + '&quot -> &quot' + ${query.looping_logic_out} + '&quot'"></td>
         </tr>
     </table>
 </body>
