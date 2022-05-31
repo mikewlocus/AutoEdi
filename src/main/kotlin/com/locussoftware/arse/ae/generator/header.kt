@@ -568,6 +568,10 @@ private void addToSiCommodity(@Nonnull SiCommodity siCommodity,
   siCommodity.addSiContainer(sica.getContainerNumber(), siccl.getNumberOfPackages());
 }
 
+protected String strSubs(@Nonnull String input, int from, int to) {
+  return input.substring(from, Math.min(input.length(), to));
+}
+
 protected UNB41 createHeaderUNB(@Nonnull IntegrationMessageLog integrationMessageLog) {
     UNB41 unb = new UNB41();
     SyntaxIdentifier si = new SyntaxIdentifier();
