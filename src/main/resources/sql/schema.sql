@@ -48,3 +48,15 @@ CREATE TABLE IF NOT EXISTS MASS_EDIT_QUERIES (
     field_count_out     VARCHAR(4),
     looping_logic_out   VARCHAR(200)
 );
+
+CREATE TABLE IF NOT EXISTS VARIABLES (
+    id                  VARCHAR(60)         DEFAULT RANDOM_UUID()           PRIMARY KEY,
+    description         VARCHAR(200),
+    var_name            VARCHAR(100),
+    code                VARCHAR(300),
+    var_type            VARCHAR(50),
+    null_check          VARCHAR(25),
+    var_params          VARCHAR(100),
+    required_params     VARCHAR(200),
+    additional_checks   VARCHAR(300)
+)
