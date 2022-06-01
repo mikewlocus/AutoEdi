@@ -1,6 +1,7 @@
 package com.locussoftware.arse.ae.controllers
 
 import com.locussoftware.arse.ae.VariableRows
+import com.locussoftware.arse.ae.entities.Variable
 import com.locussoftware.arse.ae.services.VariableService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -29,6 +30,24 @@ class VariableController(val variableService: VariableService) {
         variables.variables.forEach {
             variableService.db.save(it)
         }
+
+        return "redirect:/variables"
+    }
+
+    /**
+     * Adds a new variable.
+     */
+    @GetMapping("/variables/new")
+    fun newVariable() : String {
+        variableService.db.save(Variable(null,
+            "",
+            "\$untitled_variable",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""))
 
         return "redirect:/variables"
     }
