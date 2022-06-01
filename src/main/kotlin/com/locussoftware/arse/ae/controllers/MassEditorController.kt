@@ -25,6 +25,7 @@ class MassEditorController(val massEditorService: MassEditorService) {
         model["massEditQuery"] = MassEditQuery(null,
             "None",
             "None",
+            0,
             "",
             "",
             "",

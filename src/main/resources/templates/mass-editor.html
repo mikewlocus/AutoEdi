@@ -42,6 +42,7 @@
                 <td><p>ArseCode</p></td>
                 <td><p>Number</p></td>
                 <td><p>Looping Logic</p></td>
+                <td><p>Occurrence</p></td>
             </tr>
             <tr>
                 <td>Input:</td>
@@ -54,6 +55,11 @@
                 <td><textarea type="text" style="width: 30ch; height: 15px" maxlength="8000" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' th:field="*{arsecode_in}"></textarea></td>
                 <td><input type="text" style="width: 5ch" maxlength="4" th:field="*{field_count_in}"/></td>
                 <td><input type="text" style="width: 30ch" maxlength="100" th:field="*{looping_logic_in}"/></td>
+                <td>
+                    <select th:field="*{occurrence}">
+                        <option th:each="i : ${#numbers.sequence(0, 9)}" th:value="${i}" th:text="${i}"></option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td>Output:</td>
@@ -86,6 +92,7 @@
             <td><p>ArseCode</p></td>
             <td><p>Number</p></td>
             <td><p>Looping Logic</p></td>
+            <td><p>Occurrence</p></td>
         </tr>
         <tr th:each="query : ${massEditQueries}">
             <td th:text="${query.type_lim}"></td>
@@ -99,6 +106,7 @@
             <td th:text="'&quot' + ${query.arsecode_in} + '&quot -> &quot' + ${query.arsecode_out} + '&quot'"></td>
             <td th:text="'&quot' + ${query.field_count_in} + '&quot -> &quot' + ${query.field_count_out} + '&quot'"></td>
             <td th:text="'&quot' + ${query.looping_logic_in} + '&quot -> &quot' + ${query.looping_logic_out} + '&quot'"></td>
+            <td th:text="${query.occurrence}"></td>
         </tr>
     </table>
 </body>

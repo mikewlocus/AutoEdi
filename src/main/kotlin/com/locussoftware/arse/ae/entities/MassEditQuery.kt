@@ -7,6 +7,7 @@ import org.springframework.data.relational.core.mapping.Table
 data class MassEditQuery(@Id var id: String?,
                          var type_lim: String,
                          var version_lim: String,
+                         var occurrence: Int,
                          var seg_group_in: String,
                          var segment_in: String,
                          var element_in: String,
