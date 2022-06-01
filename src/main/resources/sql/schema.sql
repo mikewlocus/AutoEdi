@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS SPECIFICATIONS (
     id                  VARCHAR(60)         DEFAULT RANDOM_UUID()           PRIMARY KEY,
-    specification_name  VARCHAR(100)        NOT NULL
+    specification_name  VARCHAR(100)        NOT NULL,
+    message_type        VARCHAR(10)
 );
 
 CREATE TABLE IF NOT EXISTS SPECIFICATION_ROWS (

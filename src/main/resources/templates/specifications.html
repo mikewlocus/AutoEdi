@@ -13,6 +13,9 @@
 
     <h3>New</h3>
     <form th:method="post" th:action="@{'/specifications/post'}" th:object="${specification}">
+        <select th:field="*{message_type}">
+            <option th:each="messageType : ${messageTypes}" th:value="${messageType}" th:text="${messageType}"></option>
+        </select>
         <p>Specification Name (Formatted: MESSAGETYPE_VERSION_SPECNAME): <input type="text" th:field="*{specification_name}"/></p>
         <button type ="submit">Create Specification</button>
     </form>
