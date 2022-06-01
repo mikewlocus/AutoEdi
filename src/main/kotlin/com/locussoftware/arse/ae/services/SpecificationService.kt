@@ -31,8 +31,8 @@ class SpecificationService (val db: SpecificationRepository) {
         db.delete(specification)
     }
 
-    fun generate(csv: String, fileName: String) : String {
-        return generator(csv, fileName)
+    fun generate(csv: String, fileName: String, variables: String) : String {
+        return generator(csv, fileName, variables)
     }
 
 }

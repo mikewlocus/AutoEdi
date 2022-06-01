@@ -8,22 +8,14 @@ import com.locussoftware.arse.ae.getRowsFromCsv
 import com.locussoftware.arse.ae.preprocess
 import com.locussoftware.arse.ae.services.SpecificationRowService
 import com.locussoftware.arse.ae.services.SpecificationService
+import com.locussoftware.arse.ae.services.VariableService
 import org.springframework.core.io.FileSystemResource
-import org.springframework.http.ContentDisposition
-import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
-import org.springframework.util.FileCopyUtils
-import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.WebDataBinder
-
-import org.springframework.web.bind.annotation.InitBinder
-import java.io.BufferedInputStream
-import java.io.FileInputStream
-import java.io.InputStream
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 
 /**
@@ -33,7 +25,8 @@ import javax.servlet.http.HttpServletResponse
  */
 @Controller
 class SpecificationController (val specificationService: SpecificationService,
-                               val specificationRowService: SpecificationRowService) {
+                               val specificationRowService: SpecificationRowService,
+                               val variableService: VariableService) {
 
     /**
      * Initialises the web data binder to allow for a higher number of parameters to be posted.
@@ -186,8 +179,11 @@ class SpecificationController (val specificationService: SpecificationService,
             }
         }
 
+        // Build variable CSV
+        val variables = variableService.getVariablesAsCsv()
+
         // Generate schema
-        val filename = specificationService.generate(builder.toString(), specificationService.findByIdOrNull(id)!!.specification_name)
+        val filename = specificationService.generate(builder.toString(), specificationService.findByIdOrNull(id)!!.specification_name, variables)
 
         response.setHeader("Content-Disposition", "attachment; filename=${filename.split("/")[1]}");
 

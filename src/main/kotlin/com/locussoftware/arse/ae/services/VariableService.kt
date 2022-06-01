@@ -5,6 +5,7 @@ import com.locussoftware.arse.ae.repositories.VariableRepository
 import org.springframework.stereotype.Service
 import java.io.BufferedReader
 import java.io.File
+import java.lang.StringBuilder
 
 @Service
 class VariableService(val db: VariableRepository) {
@@ -60,6 +61,33 @@ class VariableService(val db: VariableRepository) {
                     splitField[addCheckIdx]))
             }
         }
+    }
+
+    /**
+     * Builds a CSV String from all of the variable rows in the DB.
+     *
+     * @return A CSV String, built from the variables in the DB.
+     */
+    fun getVariablesAsCsv() : String {
+        val builder = StringBuilder()
+        val variables = this.getVariables()
+
+        variables.forEach {
+            builder.append(it.description + ",")
+            builder.append(it.var_name + ",")
+            builder.append(it.code + ",")
+            builder.append(it.var_type + ",")
+            builder.append(it.null_check + ",")
+            builder.append(it.var_params + ",")
+            builder.append(it.required_params + ",,") // Extra comma needed for blank column
+            builder.append(it.additional_checks)
+
+            if(variables.last() != it) {
+                builder.append("\n")
+            }
+        }
+
+        return builder.toString()
     }
 
 }

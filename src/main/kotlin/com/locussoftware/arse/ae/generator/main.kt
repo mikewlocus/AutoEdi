@@ -4,11 +4,7 @@ import java.io.File
 /**
  * @author Mike Wayne
  */
-fun generator(csv: String, fileName: String) : String {
-
-    // Get field linking table from csv
-    val bufferedCustomFieldReader: BufferedReader = File("variables.csv").bufferedReader()
-    val customFieldCsv = bufferedCustomFieldReader.use { it.readText() }
+fun generator(csv: String, fileName: String, fieldsCsv: String) : String {
 
     val fileNameSplit = fileName.split(".")
     val fileNameSplitUnderscores = fileName.split("_")
@@ -30,7 +26,7 @@ fun generator(csv: String, fileName: String) : String {
 
         // Split and clean file content
         val sheetLines = preprocess(inputCsv.split(System.lineSeparator()))
-        val fields = customFieldCsv
+        val fields = fieldsCsv
                 .replace("\"\"", "&dQuot1653061221")
                 .replace("\"", "")
                 .replace("&dQuot1653061221", "\"")
