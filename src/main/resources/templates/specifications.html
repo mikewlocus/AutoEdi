@@ -34,11 +34,22 @@
                 </form>
             </td>
             <td>
-                <form method="post" th:action="@{/specifications/delete/{id} (id = ${specification.id})}">
-                    <button type ="submit" th:text="Delete"></button>
+                <form id="delSpecForm" method="post" th:action="@{/specifications/delete/{id} (id = ${specification.id})}">
+                    <button type="button" th:text="Delete" th:attr="onclick=|checkThenDelete('${specification.id}')|"></button>
                 </form>
             </td>
         </tr>
     </table>
+
+    <script>
+        form = document.getElementById("delSpecForm");
+
+        function checkThenDelete(delId) {
+            if(confirm("Are you sure you want to delete this specification?")) {
+                form.action = "/specifications/delete/" + delId;
+                form.submit();
+            }
+        }
+    </script>
 </body>
 </html>
