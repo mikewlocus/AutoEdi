@@ -46,11 +46,13 @@ class SpecificationController (val specificationService: SpecificationService,
         // Find and display all specifications
         model["specifications"] = specificationService.findSpecifications()
         // Prepare blank specification object for new specifications
-        model["specification"] = Specification(null, "", "")
+        model["specification"] = Specification(null, "", "", "")
         // Prepare specification object for import
         model["importSpec"] = ImportSpecification("", "")
         // Message types for new selection
         model["messageTypes"] = EdiConstants.messageTypes
+        // Versions for new selection
+        model["versions"] = EdiConstants.versions
 
         return "/specifications"
     }
@@ -103,7 +105,7 @@ class SpecificationController (val specificationService: SpecificationService,
     fun importSpecification(@ModelAttribute importSpec: ImportSpecification) : String {
 
         // Create specification
-        specificationService.post(Specification(null, importSpec.specification_name, ""))
+        specificationService.post(Specification(null, importSpec.specification_name, "", ""))
 
         val spec = specificationService.findByNameOrNull(importSpec.specification_name)
 
