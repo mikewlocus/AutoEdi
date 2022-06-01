@@ -66,6 +66,8 @@ class MassEditorService (val specificationService: SpecificationService,
         for(spec in specifications) {
             val specRows = specificationRowService.findSpecificationRows(spec.id!!)
 
+            var occurrenceCount = 1
+
             // Loop through all rows in specification
             for(specRow in specRows) {
                 // Check the query criteria matches the row, or is blank (and therefore considered irrelevant)
@@ -78,7 +80,15 @@ class MassEditorService (val specificationService: SpecificationService,
                     && (massEditQuery.arsecode_in.isBlank() || massEditQuery.arsecode_in == specRow.arsecode)
                     && (massEditQuery.field_count_in.isBlank() || massEditQuery.field_count_in == specRow.field_count)
                     && (massEditQuery.looping_logic_in.isBlank() || massEditQuery.looping_logic_in == specRow.looping_logic)) {
-                    relevantRows.add(specRow)
+                    // Add row to list of matches
+                    if(massEditQuery.occurrence == 0 || occurrenceCount == massEditQuery.occurrence) {
+                        relevantRows.add(specRow)
+                    }
+
+                    // Increase the occurrence count if relevant to query
+                    if(massEditQuery.occurrence > 0) {
+                        occurrenceCount++
+                    }
                 }
             }
         }
