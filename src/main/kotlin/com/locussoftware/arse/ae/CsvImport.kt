@@ -3,6 +3,8 @@ package com.locussoftware.arse.ae
 import com.locussoftware.arse.ae.entities.SpecificationRow
 import kotlin.math.max
 
+const val MAX_FIELD_COUNT_LENGTH = 4;
+
 tailrec fun getRowsFromCsv(csv: List<String>, specification_id: String, rows: List<SpecificationRow> = listOf()) : List<SpecificationRow> {
     if(csv.isEmpty()) {
         return rows
@@ -26,7 +28,10 @@ tailrec fun getRowsFromCsv(csv: List<String>, specification_id: String, rows: Li
                 splitLine[9],
                 splitLine[10],
                 splitLine[11],
-                splitLine[12],
+                if(splitLine[12].length > MAX_FIELD_COUNT_LENGTH)
+                    splitLine[12].substring(0, 4)
+                else
+                    splitLine[MAX_FIELD_COUNT_LENGTH],
                 splitLine[13],
                 "",
                 if(rows.isNotEmpty()) rows[rows.lastIndex].row_index?.plus(1) else 0
