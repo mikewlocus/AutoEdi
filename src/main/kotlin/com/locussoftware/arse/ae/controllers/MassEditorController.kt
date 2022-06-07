@@ -19,9 +19,9 @@ class MassEditorController(val massEditorService: MassEditorService) {
     @GetMapping("/mass-editor")
     fun massEditor(model: Model) : String {
         // Initialise the type limitations
-        model["typeLimitations"] = EdiConstants.messageTypes
+        model["typeLimitations"] = listOf("None") + EdiConstants.messageTypes
         // Initialise the version limitations
-        model["versionLimitations"] = EdiConstants.versions
+        model["versionLimitations"] = listOf("None") + EdiConstants.versions
         // Default query object for storing query values
         model["massEditQuery"] = MassEditQuery(null,
             "None",
