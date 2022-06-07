@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS CHANGES (
     id                  VARCHAR(60)         DEFAULT RANDOM_UUID()           PRIMARY KEY,
     query_id            VARCHAR(60),
     spec_row_id         VARCHAR(60),
-    prev_seg_group      VARCHAR(4),
+    prev_seg_group      VARCHAR(6),
     prev_segment        VARCHAR(3),
     prev_element        VARCHAR(4),
     prev_sub_element    VARCHAR(4),

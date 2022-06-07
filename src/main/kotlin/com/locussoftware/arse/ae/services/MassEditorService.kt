@@ -17,7 +17,8 @@ private const val SPECIFICATION_NAME_MIN_SIZE = 2
 @Service
 class MassEditorService (val specificationService: SpecificationService,
                          val specificationRowService: SpecificationRowService,
-                         val massEditQueryRepository: MassEditQueryRepository) {
+                         val massEditQueryRepository: MassEditQueryRepository,
+                         val changeService: ChangeService) {
 
     /**
      * Gets a list of specifications which match the given message type and version.
@@ -108,8 +109,14 @@ class MassEditorService (val specificationService: SpecificationService,
         val relevantSpecs = getSpecifications(massEditQuery.type_lim, massEditQuery.version_lim)
         val relevantRows = getRelevantRows(relevantSpecs, massEditQuery)
 
+        val savedQuery = massEditQueryRepository.save(massEditQuery)
+
         // Loop through rows relevant to the query
         for(row in relevantRows) {
+
+            // Save the row before it is changed
+            changeService.postChangeFromRow(savedQuery.id!!, row)
+
             // Update the segment group
             if(massEditQuery.seg_group_in.isNotBlank() || massEditQuery.seg_group_out.isNotBlank()) {
                 row.seg_group = massEditQuery.seg_group_out
@@ -158,8 +165,6 @@ class MassEditorService (val specificationService: SpecificationService,
             // Save the update
             specificationRowService.post(row)
         }
-
-        massEditQueryRepository.save(massEditQuery)
     }
 
     fun getQueryHistory() : List<MassEditQuery> {
