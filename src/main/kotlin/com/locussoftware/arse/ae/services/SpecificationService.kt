@@ -13,18 +13,8 @@ class SpecificationService (val db: SpecificationRepository) {
 
     fun findByIdOrNull(id: String) : Specification? = db.findByIdOrNull(id)
 
-    fun findByNameOrNull(name: String) : Specification? {
-        val specs = db.findSpecificationsByName(name)
-
-        return if(specs.isNotEmpty()) {
-            specs[0]
-        } else {
-            null
-        }
-    }
-
-    fun post(specification: Specification) {
-        db.save(specification)
+    fun post(specification: Specification) : Specification {
+        return db.save(specification)
     }
 
     fun delete(specification: Specification) {

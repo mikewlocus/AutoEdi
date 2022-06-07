@@ -105,14 +105,12 @@ class SpecificationController (val specificationService: SpecificationService,
     fun importSpecification(@ModelAttribute importSpec: ImportSpecification) : String {
 
         // Create specification
-        specificationService.post(
+        val spec = specificationService.post(
             Specification(null, importSpec.specification_name, importSpec.message_type, importSpec.version)
         )
 
-        val spec = specificationService.findByNameOrNull(importSpec.specification_name)
-
         // Process CSV
-        if(spec?.id != null) {
+        if(spec.id != null) {
             getRowsFromCsv(preprocess(importSpec.csv.split("\n")), spec.id).forEach {
                 specificationRowService.post(it)
             }
