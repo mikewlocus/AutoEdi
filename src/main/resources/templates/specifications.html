@@ -39,6 +39,8 @@
     <h3>List</h3>
     <table>
         <tr th:each = "specification : ${specifications}">
+            <td th:text="${specification.message_type}"></td>
+            <td th:text="${specification.version}"></td>
             <td th:text="${specification.specification_name}"></td>
             <td>
                 <form method="post" th:action="@{/specifications/view/{id} (id = ${specification.id})}">
