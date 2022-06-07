@@ -19,13 +19,19 @@
         <select th:field="*{version}">
             <option th:each="version : ${versions}" th:value="${version}" th:text="${version}"></option>
         </select>
-        <p>Specification Name (Formatted: MESSAGETYPE_VERSION_SPECNAME): <input type="text" th:field="*{specification_name}"/></p>
+        <input type="text" th:field="*{specification_name}"/>
         <button type ="submit">Create Specification</button>
     </form>
 
     <h3>Import</h3>
     <form th:method="post" th:action="@{'/specifications/import'}" th:object="${importSpec}">
-        <p>Specification Name: <input type="text" th:field="*{specification_name}"/></p>
+        <select th:field="*{message_type}">
+            <option th:each="messageType : ${messageTypes}" th:value="${messageType}" th:text="${messageType}"></option>
+        </select>
+        <select th:field="*{version}">
+            <option th:each="version : ${versions}" th:value="${version}" th:text="${version}"></option>
+        </select>
+        <input type="text" th:field="*{specification_name}"/>
         <p>Paste CSV here: <textarea th:field="*{csv}"></textarea></p>
         <button type ="submit">Import</button>
     </form>

@@ -48,7 +48,7 @@ class SpecificationController (val specificationService: SpecificationService,
         // Prepare blank specification object for new specifications
         model["specification"] = Specification(null, "", "", "")
         // Prepare specification object for import
-        model["importSpec"] = ImportSpecification("", "")
+        model["importSpec"] = ImportSpecification("", "", "", "")
         // Message types for new selection
         model["messageTypes"] = EdiConstants.messageTypes
         // Versions for new selection
