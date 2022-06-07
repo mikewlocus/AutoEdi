@@ -1,5 +1,6 @@
 package com.locussoftware.arse.ae.controllers
 
+import com.locussoftware.arse.ae.EdiConstants
 import com.locussoftware.arse.ae.entities.MassEditQuery
 import com.locussoftware.arse.ae.services.MassEditorService
 import org.springframework.stereotype.Controller
@@ -18,9 +19,9 @@ class MassEditorController(val massEditorService: MassEditorService) {
     @GetMapping("/mass-editor")
     fun massEditor(model: Model) : String {
         // Initialise the type limitations
-        model["typeLimitations"] = listOf("None", "COPARN", "COPRAR", "CUSCAR", "IFTMBF", "IFTMIN")
+        model["typeLimitations"] = EdiConstants.messageTypes
         // Initialise the version limitations
-        model["versionLimitations"] = listOf("None", "D95A", "D95B", "D99A", "D99B", "D00B")
+        model["versionLimitations"] = EdiConstants.versions
         // Default query object for storing query values
         model["massEditQuery"] = MassEditQuery(null,
             "None",
