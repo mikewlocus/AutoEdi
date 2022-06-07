@@ -6,11 +6,6 @@ import com.locussoftware.arse.ae.entities.SpecificationRow
 import com.locussoftware.arse.ae.repositories.MassEditQueryRepository
 import org.springframework.stereotype.Service
 
-private const val MESSAGE_TYPE_INDEX = 0
-private const val VERSION_INDEX = 1
-
-private const val SPECIFICATION_NAME_MIN_SIZE = 2
-
 /**
  * Provides functionality to the mass editor screen, primarily involving executing queries.
  */
@@ -40,12 +35,10 @@ class MassEditorService (val specificationService: SpecificationService,
 
         // Loop through all specifications
         for(spec in specificationService.findSpecifications()) {
-            val splitName = spec.specification_name.split("_")
 
             // Check that the specification type and version matches the parameters
-            if(splitName.size >= SPECIFICATION_NAME_MIN_SIZE
-                && (messageType == "None" || splitName[MESSAGE_TYPE_INDEX] == messageType)
-                && (version == "None" || splitName[VERSION_INDEX] == version)) {
+            if((messageType == "None" || spec.message_type == messageType)
+                && (version == "None" || spec.version == version)) {
                 specList.add(spec)
             }
         }
