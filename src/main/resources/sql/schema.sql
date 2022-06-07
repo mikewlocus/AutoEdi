@@ -62,4 +62,21 @@ CREATE TABLE IF NOT EXISTS VARIABLES (
     var_params          VARCHAR(100),
     required_params     VARCHAR(200),
     additional_checks   VARCHAR(300)
-)
+);
+
+CREATE TABLE IF NOT EXISTS CHANGES (
+    id                  VARCHAR(60)         DEFAULT RANDOM_UUID()           PRIMARY KEY,
+    query_id            VARCHAR(60),
+    spec_row_id         VARCHAR(60),
+    prev_seg_group      VARCHAR(4),
+    prev_segment        VARCHAR(3),
+    prev_element        VARCHAR(4),
+    prev_sub_element    VARCHAR(4),
+    prev_component      VARCHAR(2),
+    prev_field_name     VARCHAR(100),
+    prev_arsecode       VARCHAR(8000),
+    prev_field_count    VARCHAR(4),
+    prev_looping_logic  VARCHAR(200),
+    CONSTRAINT FK_changes_mass_edit_queries FOREIGN KEY (query_id) REFERENCES MASS_EDIT_QUERIES(id),
+    CONSTRAINT FK_changes_specification_rows FOREIGN KEY (spec_row_id) REFERENCES SPECIFICATION_ROWS(id)
+);
