@@ -183,8 +183,13 @@ class SpecificationController (val specificationService: SpecificationService,
         // Build variable CSV
         val variables = variableService.getVariablesAsCsv()
 
+        // Build name from message type, version, and proper name
+        val specForGeneration = specificationService.findByIdOrNull(id)!!
+        val generatorSpecName = "${specForGeneration.message_type}_${specForGeneration.version}" +
+                if(specForGeneration.specification_name.isNotBlank()) "_${specForGeneration.specification_name}" else ""
+
         // Generate schema
-        val filename = specificationService.generate(builder.toString(), specificationService.findByIdOrNull(id)!!.specification_name, variables)
+        val filename = specificationService.generate(builder.toString(), generatorSpecName, variables)
 
         response.setHeader("Content-Disposition", "attachment; filename=${filename.split("/")[1]}");
 
