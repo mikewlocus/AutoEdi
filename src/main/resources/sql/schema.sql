@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS SPECIFICATION_ROWS (
     field_name          VARCHAR(100),
     arsecode            VARCHAR(8000),
     field_count         VARCHAR(4),
-    looping_logic       VARCHAR(200),
+    looping_logic       VARCHAR(400),
     comments            VARCHAR(1000),
     row_index           INTEGER(8),
     CONSTRAINT FK_specification_rows_specification FOREIGN KEY (specification_id) REFERENCES SPECIFICATIONS(id)
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS MASS_EDIT_QUERIES (
     field_name_in       VARCHAR(100),
     arsecode_in         VARCHAR(8000),
     field_count_in      VARCHAR(4),
-    looping_logic_in    VARCHAR(200),
+    looping_logic_in    VARCHAR(400),
     seg_group_out       VARCHAR(4),
     segment_out         VARCHAR(3),
     element_out         VARCHAR(4),
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS MASS_EDIT_QUERIES (
     field_name_out      VARCHAR(100),
     arsecode_out        VARCHAR(8000),
     field_count_out     VARCHAR(4),
-    looping_logic_out   VARCHAR(200)
+    looping_logic_out   VARCHAR(400)
 );
 
 CREATE TABLE IF NOT EXISTS VARIABLES (
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS CHANGES (
     prev_field_name     VARCHAR(100),
     prev_arsecode       VARCHAR(8000),
     prev_field_count    VARCHAR(4),
-    prev_looping_logic  VARCHAR(200),
+    prev_looping_logic  VARCHAR(400),
     CONSTRAINT FK_changes_mass_edit_queries FOREIGN KEY (query_id) REFERENCES MASS_EDIT_QUERIES(id),
     CONSTRAINT FK_changes_specification_rows FOREIGN KEY (spec_row_id) REFERENCES SPECIFICATION_ROWS(id)
 );
