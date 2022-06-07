@@ -105,7 +105,9 @@ class SpecificationController (val specificationService: SpecificationService,
     fun importSpecification(@ModelAttribute importSpec: ImportSpecification) : String {
 
         // Create specification
-        specificationService.post(Specification(null, importSpec.specification_name, "", ""))
+        specificationService.post(
+            Specification(null, importSpec.specification_name, importSpec.message_type, importSpec.version)
+        )
 
         val spec = specificationService.findByNameOrNull(importSpec.specification_name)
 
