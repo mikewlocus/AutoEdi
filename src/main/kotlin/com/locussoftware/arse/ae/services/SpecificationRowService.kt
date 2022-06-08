@@ -19,6 +19,10 @@ class SpecificationRowService (val db: SpecificationRowRepository) {
         rows.forEach { db.delete(it) }
     }
 
+    fun findRowById(rowId: String) : SpecificationRow {
+        return db.findById(rowId).get()
+    }
+
     fun duplicateRowsFromIdToNextSegment(specification_id: String, rowId: String) {
         val rows = ArrayList(db.findSpecificationRows(specification_id).sortedBy { it.row_index })
         val rowsToCopy = mutableListOf<SpecificationRow>()

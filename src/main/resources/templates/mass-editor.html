@@ -107,6 +107,11 @@
             <td th:text="'&quot' + ${query.field_count_in} + '&quot -> &quot' + ${query.field_count_out} + '&quot'"></td>
             <td th:text="'&quot' + ${query.looping_logic_in} + '&quot -> &quot' + ${query.looping_logic_out} + '&quot'"></td>
             <td th:text="${query.occurrence}"></td>
+            <td>
+                <form method="post" th:action="@{/mass-editor/reverse/{id} (id = ${query.id})}">
+                    <button type="submit">Revert to here</button>
+                </form>
+            </td>
         </tr>
     </table>
 </body>
