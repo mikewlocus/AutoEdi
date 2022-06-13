@@ -29,9 +29,9 @@ tailrec fun getRowsFromCsv(csv: List<String>, specification_id: String, rows: Li
                 splitLine[10],
                 splitLine[11],
                 if(splitLine[12].length > MAX_FIELD_COUNT_LENGTH)
-                    splitLine[12].substring(0, 4)
+                    splitLine[12].substring(0, MAX_FIELD_COUNT_LENGTH)
                 else
-                    splitLine[MAX_FIELD_COUNT_LENGTH],
+                    splitLine[12],
                 splitLine[13],
                 "",
                 if(rows.isNotEmpty()) rows[rows.lastIndex].row_index?.plus(1) else 0
