@@ -106,9 +106,9 @@ internal class FieldHandlersKtTest {
         // Test simple if/else conditional, with fields
         val fieldSetter = "reference.setReferenceCodeQualifier("
         val simpleConditionalInput = "[\$si_mrn == \"\"] \"x\" [] \"y\"".split("[", "]").drop(1)
-        val simpleConditionalExpected = "\tif ((shippingInstruction.getMrn() != null) && (shippingInstruction." +
+        val simpleConditionalExpected = "\tif (((shippingInstruction != null && shippingInstruction.getMrn() != null) && shippingInstruction." +
                 "getMrn()==\"\")) {\n\t\treference.setReferenceCodeQualifier( \"x\" );\n\t} else {\n\t\treference" +
-                ".setReferenceCodeQualifier( \"y\");\n \t}"
+                ".setReferenceCodeQualifier( \"y\");\n\t}"
 
         kotlin.test.assertEquals(simpleConditionalExpected,
             createConditional(simpleConditionalInput, fieldSetter, fields))
@@ -117,11 +117,11 @@ internal class FieldHandlersKtTest {
         val complexConditionalInput = "[\$si_mrn == \"\"] \"x\" [\$strlen{\$si_mrn} < 4] \"y\" [] \"z\""
             .split("[", "]")
             .drop(1)
-        val complexConditionalExpected = "\tif ((shippingInstruction.getMrn() != null) && (shippingInstruction." +
+        val complexConditionalExpected = "\tif (((shippingInstruction != null && shippingInstruction.getMrn() != null) && shippingInstruction." +
                 "getMrn()==\"\")) {\n\t\treference.setReferenceCodeQualifier( \"x\" );\n\t} " +
-                "else if((shippingInstruction.getMrn() != null) && (shippingInstruction.getMrn().length()<4)) " +
+                "else if(((shippingInstruction != null && shippingInstruction.getMrn() != null) && shippingInstruction.getMrn().length()<4)) " +
                 "{\n\t\treference.setReferenceCodeQualifier( \"y\" );\n\t} else " +
-                "{\n\t\treference.setReferenceCodeQualifier( \"z\");\n \t}"
+                "{\n\t\treference.setReferenceCodeQualifier( \"z\");\n\t}"
 
         kotlin.test.assertEquals(complexConditionalExpected,
             createConditional(complexConditionalInput, fieldSetter, fields))
