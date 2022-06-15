@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+	testImplementation(kotlin("test-junit5"))
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
