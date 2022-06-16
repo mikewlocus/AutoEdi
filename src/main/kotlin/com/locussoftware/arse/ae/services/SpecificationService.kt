@@ -1,5 +1,6 @@
 package com.locussoftware.arse.ae.services
 
+import com.locussoftware.arse.ae.GeneratorResult
 import com.locussoftware.arse.ae.entities.Specification
 import com.locussoftware.arse.ae.repositories.SpecificationRepository
 import generator
@@ -21,7 +22,7 @@ class SpecificationService (val db: SpecificationRepository) {
         db.delete(specification)
     }
 
-    fun generate(csv: String, fileName: String, variables: String) : String {
+    fun generate(csv: String, fileName: String, variables: String) : GeneratorResult {
         return generator(csv, fileName, variables)
     }
 

@@ -44,7 +44,7 @@ class SpecificationRowService (val db: SpecificationRowRepository) {
 
             // Perform copy
             if(found) {
-                rowsToCopy.add(SpecificationRow(null, row.specification_id, row.seg_group, row.depth_5, row.depth_4, row.depth_3, row.depth_2, row.depth_1, row.segment, row.element, row.sub_element, row.component, row.field_name, row.arsecode, row.field_count, row.looping_logic, "", 0))
+                rowsToCopy.add(SpecificationRow(null, row.specification_id, row.seg_group, row.depth_5, row.depth_4, row.depth_3, row.depth_2, row.depth_1, row.segment, row.element, row.sub_element, row.component, row.field_name, row.arsecode, row.field_count, row.looping_logic, "", 0, 0))
             }
         }
 
@@ -71,6 +71,22 @@ class SpecificationRowService (val db: SpecificationRowRepository) {
 
     fun getAllRowsFromIdToNextElement() {
 
+    }
+
+    /**
+     * Loops through the errors in the generator result, sets the error code on the relevant ordered rows.
+     *
+     * @param orderedRows The rows of a specification, in their correct order.
+     * @param errors A hashmap containing the row number of the error, along with the error code as its value.
+     */
+    fun setErrorCodesFromErrorList(orderedRows: List<SpecificationRow>, errors: HashMap<Int, Int>) {
+        errors.forEach {
+            // Update error code
+            orderedRows[it.key].error_code = it.value
+
+            // Persist changed row
+            this.post(orderedRows[it.key])
+        }
     }
 
 }

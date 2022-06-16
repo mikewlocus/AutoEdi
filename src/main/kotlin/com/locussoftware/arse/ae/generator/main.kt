@@ -1,10 +1,13 @@
+import com.locussoftware.arse.ae.GeneratorResult
 import java.io.BufferedReader
 import java.io.File
+
+val errors: HashMap<Int, Int> = hashMapOf()
 
 /**
  * @author Mike Wayne
  */
-fun generator(csv: String, fileName: String, fieldsCsv: String) : String {
+fun generator(csv: String, fileName: String, fieldsCsv: String) : GeneratorResult {
 
     val fileNameSplit = fileName.split(".")
     val fileNameSplitUnderscores = fileName.split("_")
@@ -88,10 +91,10 @@ fun generator(csv: String, fileName: String, fieldsCsv: String) : String {
             out.println(postProcessed)
         }
 
-        return "Process${messageType}${version}$identifier.java"
+        return GeneratorResult("Process${messageType}${version}$identifier.java", errors)
     }
 
-    return ""
+    return GeneratorResult("", errors)
 }
 
 

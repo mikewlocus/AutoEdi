@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS SPECIFICATION_ROWS (
     field_count         VARCHAR(4),
     looping_logic       VARCHAR(400),
     comments            VARCHAR(1000),
+    error_code          INTEGER(4),
     row_index           INTEGER(8),
     CONSTRAINT FK_specification_rows_specification FOREIGN KEY (specification_id) REFERENCES SPECIFICATIONS(id)
 );

@@ -67,6 +67,19 @@ class SpecificationController (val specificationService: SpecificationService,
         model["specificationRows"] = SpecificationRows(specificationRowService.findSpecificationRows(id).sortedBy { it.row_index })
         model["specificationId"] = id
         model["specification"] = specificationService.findByIdOrNull(id)!!
+        // Map the rows which contain errors from generation
+        model["errorRows"] = specificationRowService.findSpecificationRows(id)
+            .sortedBy { it.row_index }
+            .filter { it.error_code ?: 0 > 0 }
+            .map { ErrorRowWrapper(it.seg_group,
+                it.segment,
+                it.element,
+                it.sub_element,
+                it.component,
+                "Error code ${it.error_code}: ${ErrorCodes.ERROR_CODE_LIST[it.error_code]}",
+                it.id)
+            }
+
         return "/spec-editor"
     }
 
@@ -121,13 +134,13 @@ class SpecificationController (val specificationService: SpecificationService,
 
     @PostMapping("/specifications/view/{id}/new-segment-group")
     fun newSegmentGroup(@PathVariable id: String) : String {
-        specificationRowService.post(SpecificationRow(null, id, "SG1", "", "", "", "", "+", "+++", "", "", "", "", "", "", "", "", 0))
+        specificationRowService.post(SpecificationRow(null, id, "SG1", "", "", "", "", "+", "+++", "", "", "", "", "", "", "", "", 0, 0))
         return "redirect:/specifications/view/$id"
     }
 
     @PostMapping("/specifications/view/{id}/new-row")
     fun newRow(@PathVariable id: String) : String {
-        specificationRowService.post(SpecificationRow(null, id, "", "", "", "", "", "|", "ABC", "1245", "1244", "", "Something", "[a == b] \"\" [] \"\"", "", "", "This is a comment", 0))
+        specificationRowService.post(SpecificationRow(null, id, "", "", "", "", "", "|", "ABC", "1245", "1244", "", "Something", "[a == b] \"\" [] \"\"", "", "", "This is a comment", 0, 0))
         return "redirect:/specifications/view/$id"
     }
 
@@ -155,7 +168,7 @@ class SpecificationController (val specificationService: SpecificationService,
     @GetMapping("/specifications/view/{id}/generate", produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
     @ResponseBody
     fun generate(@PathVariable id: String, response: HttpServletResponse) : FileSystemResource {
-        val rows = specificationRowService.findSpecificationRows(id)
+        val rows = specificationRowService.findSpecificationRows(id).sortedBy { it.row_index }
         val builder = StringBuilder()
 
         // Build CSV
@@ -189,9 +202,15 @@ class SpecificationController (val specificationService: SpecificationService,
                 if(specForGeneration.specification_name.isNotBlank()) "_${specForGeneration.specification_name}" else ""
 
         // Generate schema
-        val filename = specificationService.generate(builder.toString(), generatorSpecName, variables)
+        val generatorResult = specificationService.generate(builder.toString(), generatorSpecName, variables)
 
-        response.setHeader("Content-Disposition", "attachment; filename=${filename.split("/")[1]}");
+        // Set errored rows
+        specificationRowService.setErrorCodesFromErrorList(rows, generatorResult.errors)
+
+        // Read file name
+        val filename = generatorResult.generatedFilePath
+
+        response.setHeader("Content-Disposition", "attachment; filename=${filename}");
 
         // Download
         return FileSystemResource(filename)

@@ -64,13 +64,33 @@
         <form th:method="get" th:action="@{/specifications/view/{id}/generate (id=${specificationId})}">
             <button class="navbar-button" type="submit">Generate</button>
         </form>
+
+        <a href="#">Top</a>
     </div>
     <br>
+    <br>
+
     <div>
+        <h3>Errors</h3>
+        <table>
+            <tr th:each="row : ${errorRows}">
+                <td th:text="${row.segmentGroup}"></td>
+                <td th:text="${row.segment}"></td>
+                <td th:text="${row.element}"></td>
+                <td th:text="${row.subElement}"></td>
+                <td th:text="${row.component}"></td>
+                <td th:text="${row.errorText}"></td>
+                <td><a th:href="'#' + ${row.rowId}">Find</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h3>Specification</h3>
         <form id="specRows" method="post" th:action="@{/specifications/view/{id}/save (id=${specificationId})}" th:object="${specificationRows}" enctype="multipart/form-data">
             <input type="hidden" name="rows" th:field="*{rows}" />
             <table style="border-collapse: collapse;">
-                <tr th:each="row, count : *{rows}" th:style="${!#strings.isEmpty(row.seg_group)} ? 'background-color: #60E080' : (${!#strings.isEmpty(row.segment)} ? 'background-color: #B0C0FF' : ((${#strings.isEmpty(row.arsecode) and !#strings.isEmpty(row.element)}) ? 'background-color: #C0C0C0' : 'background-color: white'))">
+                <tr th:each="row, count : *{rows}" th:id="*{rows[__${count.index}__].id}" th:style="${!#strings.isEmpty(row.seg_group)} ? 'background-color: #60E080' : (${!#strings.isEmpty(row.segment)} ? 'background-color: #B0C0FF' : ((${#strings.isEmpty(row.arsecode) and !#strings.isEmpty(row.element)}) ? 'background-color: #C0C0C0' : 'background-color: white'))">
                     <td><input type="text" maxlength="3" style="width: 3ch" th:field="*{rows[__${count.index}__].seg_group}"/></td>
                     <td><input type="text" maxlength="1" style="width: 1ch" th:field="*{rows[__${count.index}__].depth_5}"/></td>
                     <td><input type="text" maxlength="1" style="width: 1ch" th:field="*{rows[__${count.index}__].depth_4}"/></td>

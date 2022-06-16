@@ -22,5 +22,6 @@ data class SpecificationRow (
     var field_count: String?,
     var looping_logic: String?,
     var comments: String?,
+    var error_code: Int?,
     var row_index: Int?
 )

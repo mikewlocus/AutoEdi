@@ -34,6 +34,7 @@ tailrec fun getRowsFromCsv(csv: List<String>, specification_id: String, rows: Li
                     splitLine[12],
                 splitLine[13],
                 "",
+                0,
                 if(rows.isNotEmpty()) rows[rows.lastIndex].row_index?.plus(1) else 0
             )
         )
