@@ -76,7 +76,7 @@ fun generator(csv: String, fileName: String, fieldsCsv: String) : String {
 
         println(postProcessed)
 
-        val file = File("Output Classes/Process${messageType}${version}$identifier.java")
+        val file = File("Process${messageType}${version}$identifier.java")
 
         // Create new file if it doesn't already exist
         if(!file.exists()) {
@@ -84,11 +84,11 @@ fun generator(csv: String, fileName: String, fieldsCsv: String) : String {
         }
 
         // Write output to file
-        File("Output Classes/Process${messageType}${version}$identifier.java").printWriter().use { out ->
+        File("Process${messageType}${version}$identifier.java").printWriter().use { out ->
             out.println(postProcessed)
         }
 
-        return "Output Classes/Process${messageType}${version}$identifier.java"
+        return "Process${messageType}${version}$identifier.java"
     }
 
     return ""
