@@ -76,7 +76,7 @@ class SpecificationController (val specificationService: SpecificationService,
                 it.element,
                 it.sub_element,
                 it.component,
-                "Error code ${it.error_code}: ${ErrorCodes.ERROR_CODE_LIST[it.error_code]}",
+                "Error code ${it.error_code}: ${ErrorCode.getMessageByCode(it.error_code ?: 0)}",
                 it.id)
             }
 
