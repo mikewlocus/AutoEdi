@@ -30,3 +30,13 @@ fun validateSquareBrackets(arsecode: String) : Boolean {
 
     return true
 }
+
+/**
+ * Validates the code to ensure any round brackets would not cause errors in the output.
+ *
+ * @param arsecode The code being validated.
+ * @return True if valid, false if not.
+ */
+fun validateRoundBrackets(arsecode: String) : Boolean {
+    return true
+}

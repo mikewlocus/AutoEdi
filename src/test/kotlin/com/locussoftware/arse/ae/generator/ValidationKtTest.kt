@@ -11,51 +11,87 @@ internal class ValidationKtTest {
     }
 
     @Test
-    fun testShouldValidateSquareBrackets_ValidInputNoSpaces_ShouldReturnTrue() {
+    fun testValidateSquareBrackets_ValidInputNoSpaces_ShouldReturnTrue() {
         val validInputNoSpaces = "[\$var == \"\"]\"x\"[]\"y\""
         kotlin.test.assertTrue(validateSquareBrackets(validInputNoSpaces))
     }
 
     @Test
-    fun testShouldValidateSquareBrackets_ValidInputComplex_ShouldReturnTrue() {
+    fun testValidateSquareBrackets_ValidInputComplex_ShouldReturnTrue() {
         val validInputComplex = "[\$var == \"\"] \"x\" [\$var != \"\" && (4 == 5) || (3 + 2 == 5)] \"z\" [] \"y\""
         kotlin.test.assertTrue(validateSquareBrackets(validInputComplex))
     }
 
     @Test
-    fun testShouldValidateSquareBrackets_ValidInputNoBrackets_ShouldReturnTrue() {
+    fun testValidateSquareBrackets_ValidInputNoBrackets_ShouldReturnTrue() {
         val validNoBrackets = "\"Regular input\""
         kotlin.test.assertTrue(validateSquareBrackets(validNoBrackets))
     }
 
     @Test
-    fun testShouldValidateSquareBrackets_InvalidInput_ShouldReturnFalse() {
+    fun testValidateSquareBrackets_InvalidInput_ShouldReturnFalse() {
         val invalidInput = "[\$var == \"\" \"x\" [] \"y\""
         kotlin.test.assertFalse(validateSquareBrackets(invalidInput))
     }
 
     @Test
-    fun testShouldValidateSquareBrackets_InvalidInputNoResult_ShouldReturnFalse() {
+    fun testValidateSquareBrackets_InvalidInputNoResult_ShouldReturnFalse() {
         val invalidInputNoResult = "[\$var == \"\"] \"x\" []"
         kotlin.test.assertFalse(validateSquareBrackets(invalidInputNoResult))
     }
 
     @Test
-    fun testShouldValidateSquareBrackets_InvalidInputNoFirstBracket_ShouldReturnFalse() {
+    fun testValidateSquareBrackets_InvalidInputNoFirstBracket_ShouldReturnFalse() {
         val invalidInputNoFirstBracket = "\$var == \"\"] \"x\" [] \"y\""
         kotlin.test.assertFalse(validateSquareBrackets(invalidInputNoFirstBracket))
     }
 
     @Test
-    fun testShouldValidateSquareBrackets_InvalidInputTooManyBrackets_ShouldReturnFalse() {
+    fun testValidateSquareBrackets_InvalidInputTooManyBrackets_ShouldReturnFalse() {
         val invalidInputTooManyBrackets = "[\$var == \"\"]] \"x\" [] \"y\""
         kotlin.test.assertFalse(validateSquareBrackets(invalidInputTooManyBrackets))
     }
 
     @Test
-    fun testShouldValidateSquareBrackets_InvalidInputElseCaseWrongPlace_ShouldReturnFalse() {
+    fun testValidateSquareBrackets_InvalidInputElseCaseWrongPlace_ShouldReturnFalse() {
         val invalidInputElseCaseWrongPlace = "[\$var == \"\"] \"x\" [] \"y\" [4 == 5] \"z\""
         kotlin.test.assertFalse(validateSquareBrackets(invalidInputElseCaseWrongPlace))
+    }
+
+    @Test
+    fun testValidateRoundBrackets_ValidInput_ShouldReturnTrue() {
+        val validInput = "[(x == y || 3 == 3) && (y == z)]"
+        kotlin.test.assertTrue(validateRoundBrackets(validInput))
+    }
+
+    @Test
+    fun testValidateRoundBrackets_ValidInputNestedBrackets_ShouldReturnTrue() {
+        val validInputNestedBrackets = "[(x == y || ((3 == 3) && (4 + 7 == 12))) && (y == z)]"
+        kotlin.test.assertTrue(validateRoundBrackets(validInputNestedBrackets))
+    }
+
+    @Test
+    fun testValidateRoundBrackets_InvalidInput_ShouldReturnFalse() {
+        val invalidInput = "[(x == y || 3 == 3) && (y == z]"
+        kotlin.test.assertFalse(validateRoundBrackets(invalidInput))
+    }
+
+    @Test
+    fun testValidateRoundBrackets_InvalidInputNestedBrackets_ShouldReturnFalse() {
+        val validInputNestedBrackets = "[(x == y || ((3 == 3) && (4 + 7 == 12)) && (y == z)]"
+        kotlin.test.assertFalse(validateRoundBrackets(validInputNestedBrackets))
+    }
+
+    @Test
+    fun testValidateRoundBrackets_InvalidInputBracketsWrongWay_ShouldReturnFalse() {
+        val invalidInputBracketsWrongWay = "[)x == y || 3 == 3( && )y == z("
+        kotlin.test.assertFalse(validateRoundBrackets(invalidInputBracketsWrongWay))
+    }
+
+    @Test
+    fun testValidateRoundBrackets_InvalidInputAllClosingBrackets_ShouldReturnFalse() {
+        val invalidInputAllClosingBrackets = "[)x == y || 3 == 3) && )y == z]"
+        kotlin.test.assertFalse(validateRoundBrackets(invalidInputAllClosingBrackets))
     }
 
 }
