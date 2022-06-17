@@ -1,5 +1,6 @@
 import com.locussoftware.arse.ae.ErrorCode
 import com.locussoftware.arse.ae.GeneratorResult
+import com.locussoftware.arse.ae.generator.validateRoundBrackets
 import com.locussoftware.arse.ae.generator.validateSquareBrackets
 import java.io.BufferedReader
 import java.io.File
@@ -137,6 +138,10 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
 
     if(!validateSquareBrackets(currentLine[VALUE_COLUMN])) {
         errors[rowCount] = ErrorCode.SQUARE_BRACKET_ERROR.code
+    }
+
+    if(!validateRoundBrackets(currentLine[VALUE_COLUMN])) {
+        errors[rowCount] = ErrorCode.ROUND_BRACKET_ERROR.code
     }
 
     // Segment group creation methods
