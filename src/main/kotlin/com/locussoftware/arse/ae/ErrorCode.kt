@@ -2,7 +2,7 @@ package com.locussoftware.arse.ae
 
 enum class ErrorCode(val code: Int, val message: String) {
     UNKNOWN_ERROR(1000, "I don't even know how you've messed this up so badly."),
-    SQUARE_BRACKET_ERROR(1000, "Incorrect square brackets for conditional."),
+    SQUARE_BRACKET_ERROR(1001, "Incorrect square brackets for conditional."),
     ROUND_BRACKET_ERROR(1002, "Incorrect round brackets."),
     VARIABLE_NOT_FOUND_ERROR(1003, "Variable not found."),
     VARIABLE_NOT_IMPLEMENTED_ERROR(1004, "Variable not implemented."),
