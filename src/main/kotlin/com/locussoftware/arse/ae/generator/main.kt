@@ -1,13 +1,17 @@
+import com.locussoftware.arse.ae.ErrorCode
 import com.locussoftware.arse.ae.GeneratorResult
 import java.io.BufferedReader
 import java.io.File
 
-val errors: HashMap<Int, Int> = hashMapOf()
+var errors: HashMap<Int, Int> = hashMapOf()
+var rowCount: Int = 0
 
 /**
  * @author Mike Wayne
  */
 fun generator(csv: String, fileName: String, fieldsCsv: String) : GeneratorResult {
+
+    errors = hashMapOf()
 
     val fileNameSplit = fileName.split(".")
     val fileNameSplitUnderscores = fileName.split("_")
@@ -121,6 +125,9 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
 
     // Get an array of the cells in the current row
     val currentLine = sheetLines[0].split(",")
+
+    // Set the row counter to the current row's index
+    rowCount = currentLine[INDEX_COLUMN].toInt()
 
     // Error message due to improper formatting of the CSV file (all rows should have at least 12 cells, if they don't, it's an indication of the presence of a carriage return in a cell)
     if(currentLine.size < 13) {
@@ -301,6 +308,11 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
         val field = getFields(currentLine[11], fields)
         val locals = createLocals(currentLine[11].split(";", "{", "}"), fields)
         val nullCheck = createMultiNullCheck(currentLine[11].split(";", "{", "}"), fields)
+
+        if(field == currentLine[VALUE_COLUMN] && field.contains("$")) {
+            errors[rowCount] = ErrorCode.VARIABLE_NOT_FOUND_ERROR.code
+        }
+
         val subStringCode = if(currentLine[9].isNotBlank()) {
             val componentLength = currentLine[TYPE_COLUMN].toIntOrNull() ?: getComponentLength(standard)
             val lowerBound = (Integer.valueOf(currentLine[9]) - 1) * componentLength

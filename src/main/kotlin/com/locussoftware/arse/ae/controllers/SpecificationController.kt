@@ -187,6 +187,7 @@ class SpecificationController (val specificationService: SpecificationService,
             builder.append(it.arsecode + ",")
             builder.append(it.field_count + ",")
             builder.append(it.looping_logic + ",")
+            builder.append(it.row_index.toString() + ",")
 
             if(rows.last() != it) {
                 builder.append("\n")

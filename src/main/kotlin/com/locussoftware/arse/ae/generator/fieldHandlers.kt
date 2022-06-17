@@ -1,3 +1,5 @@
+import com.locussoftware.arse.ae.ErrorCode
+
 /* This file contains a collection of methods for acting directly on the input of the input column. */
 
 /**
@@ -42,7 +44,8 @@ fun getFields(inputFields: String, allFields: List<String>) : String {
                 fieldSplitOnParams[parameters.indexOf(it)] + paramCode
             }.replace(';', ',') + fieldSplitOnParams.last()
         } else{
-            "ERROR!_Incorrect_number_of_parameters_provided_for:$inputFields"
+            errors[rowCount] = ErrorCode.INCORRECT_NUMBER_OF_PARAMETERS.code
+            ""
         }
     }
 }
