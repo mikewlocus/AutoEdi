@@ -72,6 +72,9 @@
 
     <div>
         <h3>Errors</h3>
+        <form th:method="post" th:action="@{/specifications/view/{id}/clear-errors (id=${specificationId})}">
+            <button type="submit">Clear</button>
+        </form>
         <table>
             <tr th:each="row : ${errorRows}">
                 <td>!!!</td>

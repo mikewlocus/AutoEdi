@@ -235,4 +235,24 @@ class SpecificationController (val specificationService: SpecificationService,
         return "redirect:/specifications/view/$id"
     }
 
+    /**
+     * Clear all of the errors encountered in the generation of the specification.
+     *
+     * @param id The ID of the specification having errors cleared.
+     */
+    @RequestMapping("/specifications/view/{id}/clear-errors")
+    fun saveSpecification(@PathVariable id: String) : String {
+
+        val rows = specificationRowService.findSpecificationRows(id)
+
+        // Reset the error for each row, then persist the change
+        rows.forEach {
+            it.error_code = 0
+            specificationRowService.post(it)
+        }
+
+        // Redirect back to the specification
+        return "redirect:/specifications/view/$id"
+    }
+
 }
