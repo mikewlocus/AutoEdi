@@ -1,5 +1,6 @@
 import com.locussoftware.arse.ae.ErrorCode
 import com.locussoftware.arse.ae.GeneratorResult
+import com.locussoftware.arse.ae.generator.validateSquareBrackets
 import java.io.BufferedReader
 import java.io.File
 
@@ -132,6 +133,10 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
     // Error message due to improper formatting of the CSV file (all rows should have at least 12 cells, if they don't, it's an indication of the presence of a carriage return in a cell)
     if(currentLine.size < 13) {
         throw error (currentCode + currentFunctions + "ERROR: The CSV file contains a formatting error, encountered here. This can be caused by a line separator within a cell.")
+    }
+
+    if(!validateSquareBrackets(currentLine[VALUE_COLUMN])) {
+        errors[rowCount] = ErrorCode.SQUARE_BRACKET_ERROR.code
     }
 
     // Segment group creation methods
