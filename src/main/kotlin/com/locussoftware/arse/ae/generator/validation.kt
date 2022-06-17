@@ -38,5 +38,35 @@ fun validateSquareBrackets(arsecode: String) : Boolean {
  * @return True if valid, false if not.
  */
 fun validateRoundBrackets(arsecode: String) : Boolean {
-    return true
+    return bracketCount(arsecode.toCharArray().toList()) == 0
+}
+
+/**
+ * Walk along the input, counting up per open bracket and counting down per closed bracket.
+ *
+ * @param input The input string, split up into characters.
+ * @return The count of brackets.
+ */
+tailrec fun bracketCount(input: List<Char>, count: Int = 0) : Int {
+    // Base case
+    if(input.isEmpty()) {
+        return count
+    }
+
+    // Calculate new count based on bracket presence
+    val newCount = if(input[0] == '(') {
+        count + 1
+    } else if(input[0] == ')') {
+        count - 1
+    } else {
+        count
+    }
+
+    // Return immediately if negative
+    if(newCount < 0) {
+        return newCount
+    }
+
+    // Continue recursion
+    return bracketCount(input.subList(1, input.size), newCount)
 }
