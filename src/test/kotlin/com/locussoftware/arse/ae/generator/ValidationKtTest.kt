@@ -35,6 +35,12 @@ internal class ValidationKtTest {
     }
 
     @Test
+    fun testValidateSquareBrackets_ValidInputSegmentConditional_ShouldReturnTrue() {
+        val input = "[x == y]"
+        kotlin.test.assertTrue(validateSquareBrackets(input))
+    }
+
+    @Test
     fun testValidateSquareBrackets_InvalidInput_ShouldReturnFalse() {
         val invalidInput = "[\$var == \"\" \"x\" [] \"y\""
         kotlin.test.assertFalse(validateSquareBrackets(invalidInput))
