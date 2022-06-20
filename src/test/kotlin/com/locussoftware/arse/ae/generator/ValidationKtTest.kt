@@ -29,6 +29,12 @@ internal class ValidationKtTest {
     }
 
     @Test
+    fun testValidateSquareBrackets_ValidInputEmpty_ShouldReturnTrue() {
+        val input = ""
+        kotlin.test.assertTrue(validateSquareBrackets(input))
+    }
+
+    @Test
     fun testValidateSquareBrackets_InvalidInput_ShouldReturnFalse() {
         val invalidInput = "[\$var == \"\" \"x\" [] \"y\""
         kotlin.test.assertFalse(validateSquareBrackets(invalidInput))
@@ -68,6 +74,18 @@ internal class ValidationKtTest {
     fun testValidateRoundBrackets_ValidInputNestedBrackets_ShouldReturnTrue() {
         val validInputNestedBrackets = "[(x == y || ((3 == 3) && (4 + 7 == 12))) && (y == z)]"
         kotlin.test.assertTrue(validateRoundBrackets(validInputNestedBrackets))
+    }
+
+    @Test
+    fun testValidateRoundBrackets_ValidInputNoBrackets_ShouldReturnTrue() {
+        val input = "[x == y]"
+        kotlin.test.assertTrue(validateRoundBrackets(input))
+    }
+
+    @Test
+    fun testValidateRoundBrackets_ValidInputEmpty_ShouldReturnTrue() {
+        val input = "[x == y]"
+        kotlin.test.assertTrue(validateRoundBrackets(input))
     }
 
     @Test
