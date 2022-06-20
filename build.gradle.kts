@@ -34,6 +34,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.amqp:spring-rabbit-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	implementation(project(":arse-ui"))
 }
 
 tasks.withType<KotlinCompile> {
