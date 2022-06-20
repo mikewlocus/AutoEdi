@@ -7,6 +7,11 @@ package com.locussoftware.arse.ae.generator
  * @return True if valid, false if not.
  */
 fun validateSquareBrackets(arsecode: String) : Boolean {
+    // Return true if string is empty
+    if(arsecode.isEmpty()) {
+        return true
+    }
+
     // Check the number of open and closing brackets match
     if(arsecode.split("[").size != arsecode.split("]").size) {
         return false
