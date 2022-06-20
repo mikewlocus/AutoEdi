@@ -17,6 +17,14 @@ fun validateSquareBrackets(arsecode: String) : Boolean {
         return false
     }
 
+    // Check for segment creation conditional
+    val sizeOfSplitWithOneOccurrence = 2
+    if(arsecode.first() == '['
+        && arsecode.last() == ']'
+        && arsecode.split("[").size == sizeOfSplitWithOneOccurrence) {
+        return true
+    }
+
     // Check all conditions have a result
     arsecode.split("]").forEach {
         // Ensure the space between the last ']' and the next '[' (if it exists) contains no whitespace
