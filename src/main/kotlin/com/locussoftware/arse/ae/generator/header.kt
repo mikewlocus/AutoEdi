@@ -637,7 +637,7 @@ fun getHeaderParams(messageType: String) : List<String> {
 fun getImlParams(messageType: String) : List<String> {
     return when(messageType) {
         "Coparn" -> listOf("Voyage voyage", "SchedulePort schedulePort", "MessageFunction messageFunction")
-        "Coprar" -> listOf("Booking booking", "Voyage voyage", "SchedulePort schedulePort", "Terminal terminal")
+        "Coprar" -> listOf("List<Booking> bookings", "Voyage voyage", "SchedulePort schedulePort", "Terminal terminal")
         "Coreor" -> listOf("List<ContainerReleaseReferenceAllocation> containerReleaseReferenceAllocations", "ContainerLocation containerLocation", "Voyage voyage", "SchedulePort schedulePort")
         "Cuscar" -> listOf("Voyage voyage", "SchedulePort schedulePort")
         "Ifcsum" -> listOf("SchedulePort schedulePort", "SchedulePortEdiMap spEdi")
@@ -651,7 +651,7 @@ fun getImlParams(messageType: String) : List<String> {
 fun getCreatorParams(messageType: String) : List<String> {
     return when(messageType) {
         "Coparn" -> listOf("ContainerReleaseReference containerReleaseReference", "Company company", "Voyage voyage", "SchedulePort schedulePort", "MessageFunction messageFunction")
-        "Coprar" -> listOf("Company company", "Booking booking", "Voyage voyage", "SchedulePort schedulePort", "Terminal terminal")
+        "Coprar" -> listOf("Company company", "List<Booking> bookings", "Voyage voyage", "SchedulePort schedulePort", "Terminal terminal")
         "Coreor" -> listOf("List<ContainerReleaseReferenceAllocation> containerReleaseReferenceAllocations", "ContainerLocation containerLocation", "Voyage voyage", "SchedulePort schedulePort")
         "Cuscar" -> listOf("List<SiContainerAllocation> siContainerAllocations", "Company company", "Voyage voyage", "SchedulePort schedulePort", "MessageFunction messageFunction", "boolean discharge")
         "Ifcsum" -> listOf("List<ShippingInstruction> shippingInstructions", "SchedulePort schedulePort", "MessageFunction messageFunction", "SchedulePortEdiMap spEdi")
@@ -694,6 +694,8 @@ fun headerMessageBodyCaller(messageType: String, versionCode: String, sheetLines
         return log;
         """
         "Coprar" -> """
+        this.terminal = terminal;
+            
         if(coprarType.equals(CoprarType.DISCHARGE)) {
             this.discharge = true;
         }
