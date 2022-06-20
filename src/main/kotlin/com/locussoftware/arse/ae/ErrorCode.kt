@@ -1,5 +1,10 @@
 package com.locussoftware.arse.ae
 
+/**
+ * Contains the error codes which can be encountered during the generation of a specification.
+ *
+ * @author Mike Wayne
+ */
 enum class ErrorCode(val code: Int, val message: String) {
     UNKNOWN_ERROR(1000, "I don't even know how you've messed this up so badly."),
     SQUARE_BRACKET_ERROR(1001, "Incorrect square brackets for conditional."),
@@ -12,6 +17,12 @@ enum class ErrorCode(val code: Int, val message: String) {
     INCORRECT_NUMBER_OF_CONDITIONAL_SIGNS(1008, "Incorrect number of conditional signs.");
 
     companion object {
+        /**
+         * Loops through the error messages to find the given error code, and returns its error message if found.
+         *
+         * @param code The error code for which to get a message.
+         * @return The error message of the given error code, or a default one if not found.
+         */
         fun getMessageByCode(code: Int) : String {
             values().forEach {
                 if(it.code == code) {
