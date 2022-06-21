@@ -127,6 +127,20 @@ internal class FieldHandlersKtTest {
             createConditional(complexConditionalInput, fieldSetter, fields))
     }
 
+    @Test
+    fun testCreateConditional_shouldIgnoreSpeechMarks() {
+        val input = "[\$streq{\$crr_turnOutTransport;\"Barge (Inland)\"}] \"8\""
+            .split("[", "]")
+            .drop(1)
+        val expected = "\tif (((containerReleaseReference.getturnOutTransport().getLabel() != null) && containerReleaseReference.getturnOutTransport().getLabel().equals(\"Barge (Inland)\"))) {\n" +
+                "\t\tc220.setModeOfTransportCoded( \"8\");\n" +
+                "\t}"
+
+        val fieldSetter = "c220.setModeOfTransportCoded("
+
+        kotlin.test.assertEquals(expected, createConditional(input, fieldSetter, fields))
+    }
+
     /**
      * Test Java method parameters are being successfully generated from the schema.
      */
