@@ -190,11 +190,11 @@ tailrec fun createConditionWithChecks(splitCondition: List<String>,
         return output
     }
 
-    val regex = "==|!=|!|<|>|<=|>=|&&|\\|\\||\\(|\\)"
+    val regex = "(?<=(==|!=|!|<|>|<=|>=|&&|\\|\\||\\(|\\)))|(?=(==|!=|!|<|>|<=|>=|&&|\\|\\||\\(|\\)))".toRegex()
 
     // Splits the condition, and attempts to find the code for any defined fields
-    val condition = splitCondition[0]
-        .split("(?<=($regex))|(?=($regex))".toRegex())
+    val condition = joinSplitsWithQuotations(splitCondition[0]
+        .split(regex))
         .joinToString("") {
             getFields(it, fields).trim(' ')
         }
@@ -291,6 +291,43 @@ tailrec fun createParameters(sheetLines: List<String>,
         fields,
         newParamsList,
         paramsToIgnore + listOf(newLoopedParams))
+}
+
+/**
+ * Joins together any splits in a string which are contained between quotation marks.
+ *
+ * This is to ensure characters used in the split regex can be included within quotation marks.
+ *
+ * @param splitString The string split by regex.
+ * @return The string split by regex, with any erroneous splits merged together.
+ */
+tailrec fun joinSplitsWithQuotations(splitString: List<String>,
+                                     withinQuotes: Boolean = false,
+                                     output: List<String> = listOf()) : List<String> {
+    if (splitString.isEmpty()) {
+        return output
+    }
+
+    val numberOfQuoteSplits = splitString.first().split("\"").size
+
+    return if(withinQuotes) {
+        // Join the current split with the last, as it's contained within quotes
+        val joinedWithLast = output.subList(0, output.lastIndex) + listOf(output.last() + splitString.first())
+
+        if(numberOfQuoteSplits % 2 == 0 && numberOfQuoteSplits > 1) {
+            // End quote found
+            joinSplitsWithQuotations(splitString.subList(1, splitString.size), false, joinedWithLast)
+        } else {
+            // Continue merging with last
+            joinSplitsWithQuotations(splitString.subList(1, splitString.size), true, joinedWithLast)
+        }
+    } else if (!withinQuotes && splitString.size > 1 && numberOfQuoteSplits % 2 == 0) {
+        // Start quote found, join with the next item
+        joinSplitsWithQuotations(splitString.subList(2, splitString.size), true, output + listOf(splitString[0] + splitString[1]))
+    } else {
+        // No quotations found, add to output as usual, with no merging
+        joinSplitsWithQuotations(splitString.subList(1, splitString.size), false, output + splitString[0])
+    }
 }
 
 /**
