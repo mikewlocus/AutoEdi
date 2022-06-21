@@ -76,10 +76,12 @@ class SpecificationRowService (val db: SpecificationRowRepository) {
     /**
      * Loops through the errors in the generator result, sets the error code on the relevant ordered rows.
      *
-     * @param orderedRows The rows of a specification, in their correct order.
+     * @param specification_id The id of the specification.
      * @param errors A hashmap containing the row number of the error, along with the error code as its value.
      */
-    fun setErrorCodesFromErrorList(orderedRows: List<SpecificationRow>, errors: HashMap<Int, Int>) {
+    fun setErrorCodesFromErrorList(specification_id: String, errors: HashMap<Int, Int>) {
+        val orderedRows = this.findSpecificationRows(specification_id).sortedBy { it.row_index }
+
         errors.forEach {
             // Update error code
             orderedRows[it.key].error_code = it.value
@@ -87,6 +89,42 @@ class SpecificationRowService (val db: SpecificationRowRepository) {
             // Persist changed row
             this.post(orderedRows[it.key])
         }
+    }
+
+    /**
+     * Rebuilds the CSV from the rows of the given specification.
+     *
+     * @param specification_id The id of the specification being rebuilt.
+     * @return The CSV string of the specification.
+     */
+    fun rebuildCsv(specification_id: String) : String {
+        val rows = this.findSpecificationRows(specification_id).sortedBy { it.row_index }
+        val builder = StringBuilder()
+
+        // Build CSV
+        rows.subList(1, rows.size).forEach {
+            builder.append(it.seg_group + ",")
+            builder.append(it.depth_5 + ",")
+            builder.append(it.depth_4 + ",")
+            builder.append(it.depth_3 + ",")
+            builder.append(it.depth_2 + ",")
+            builder.append(it.depth_1 + ",")
+            builder.append(it.segment + ",")
+            builder.append(it.element + ",")
+            builder.append(it.sub_element + ",")
+            builder.append(it.component + ",")
+            builder.append(it.field_name + ",")
+            builder.append(it.arsecode + ",")
+            builder.append(it.field_count + ",")
+            builder.append(it.looping_logic + ",")
+            builder.append(it.row_index.toString() + ",")
+
+            if(rows.last() != it) {
+                builder.append("\n")
+            }
+        }
+
+        return builder.toString()
     }
 
 }

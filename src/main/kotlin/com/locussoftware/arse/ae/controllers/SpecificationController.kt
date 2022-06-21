@@ -168,31 +168,8 @@ class SpecificationController (val specificationService: SpecificationService,
     @GetMapping("/specifications/view/{id}/generate", produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
     @ResponseBody
     fun generate(@PathVariable id: String, response: HttpServletResponse) : FileSystemResource {
-        val rows = specificationRowService.findSpecificationRows(id).sortedBy { it.row_index }
-        val builder = StringBuilder()
-
-        // Build CSV
-        rows.subList(1, rows.size).forEach {
-            builder.append(it.seg_group + ",")
-            builder.append(it.depth_5 + ",")
-            builder.append(it.depth_4 + ",")
-            builder.append(it.depth_3 + ",")
-            builder.append(it.depth_2 + ",")
-            builder.append(it.depth_1 + ",")
-            builder.append(it.segment + ",")
-            builder.append(it.element + ",")
-            builder.append(it.sub_element + ",")
-            builder.append(it.component + ",")
-            builder.append(it.field_name + ",")
-            builder.append(it.arsecode + ",")
-            builder.append(it.field_count + ",")
-            builder.append(it.looping_logic + ",")
-            builder.append(it.row_index.toString() + ",")
-
-            if(rows.last() != it) {
-                builder.append("\n")
-            }
-        }
+        // Build specification CSV
+        val csv = specificationRowService.rebuildCsv(id)
 
         // Build variable CSV
         val variables = variableService.getVariablesAsCsv()
@@ -203,10 +180,10 @@ class SpecificationController (val specificationService: SpecificationService,
                 if(specForGeneration.specification_name.isNotBlank()) "_${specForGeneration.specification_name}" else ""
 
         // Generate schema
-        val generatorResult = specificationService.generate(builder.toString(), generatorSpecName, variables)
+        val generatorResult = specificationService.generate(csv, generatorSpecName, variables)
 
         // Set errored rows
-        specificationRowService.setErrorCodesFromErrorList(rows, generatorResult.errors)
+        specificationRowService.setErrorCodesFromErrorList(id, generatorResult.errors)
 
         // Read file name
         val filename = generatorResult.generatedFilePath
@@ -241,7 +218,7 @@ class SpecificationController (val specificationService: SpecificationService,
      * @param id The ID of the specification having errors cleared.
      */
     @RequestMapping("/specifications/view/{id}/clear-errors")
-    fun saveSpecification(@PathVariable id: String) : String {
+    fun clearErrors(@PathVariable id: String) : String {
 
         val rows = specificationRowService.findSpecificationRows(id)
 
