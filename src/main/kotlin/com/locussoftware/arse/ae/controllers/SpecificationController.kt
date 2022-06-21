@@ -13,6 +13,7 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
+import java.io.File
 import javax.servlet.http.HttpServletResponse
 
 /**
@@ -230,6 +231,37 @@ class SpecificationController (val specificationService: SpecificationService,
 
         // Redirect back to the specification
         return "redirect:/specifications/view/$id"
+    }
+
+    /**
+     * Rebuilds a CSV file from the specification rows in the database, and downloads it.
+     *
+     * @param id The ID of the specification for which to rebuild and download a CSV.
+     */
+    @GetMapping("/specifications/export/{id}", produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
+    @ResponseBody
+    fun exportCsv(@PathVariable id: String, response: HttpServletResponse) : FileSystemResource {
+        // Build specification CSV
+        val csv = specificationRowService.rebuildCsv(id)
+
+        val filename = "export.csv"
+        val file = File(filename)
+
+        // Create new file if it doesn't already exist
+        if(!file.exists()) {
+            file.createNewFile()
+        }
+
+        // Write output to file
+        File(filename).printWriter().use { out ->
+            out.println(csv)
+        }
+
+        // Read file name
+        response.setHeader("Content-Disposition", "attachment; filename=${filename}");
+
+        // Download
+        return FileSystemResource(filename)
     }
 
 }
