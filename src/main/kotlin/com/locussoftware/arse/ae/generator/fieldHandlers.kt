@@ -250,7 +250,7 @@ tailrec fun createParameters(sheetLines: List<String>,
     // Split the current CSV line on commas to get cell values
     val currentLine = sheetLines[0].split(",")
     // Get the list of parameters from the value column, minus the ones in any looping logics to be ignored
-    val params = getListOfParams(currentLine[VALUE_COLUMN].split(regex), fields).minus(loopedParams.flatten())
+    val params = getListOfParams(currentLine[VALUE_COLUMN].split(regex), fields).minus(loopedParams.flatten().toSet())
 
     // End of an inner segment, remove previous parameters to be ignored
     val paramsToIgnore = if(currentLine[SEGMENT_GROUP_COLUMN] == "------") {
@@ -279,12 +279,19 @@ tailrec fun createParameters(sheetLines: List<String>,
 
     // Format the parameters properly
     val newParamsList = (parameters + params.map {
-        if(it.split(":").size > 1)
+        if(it.split(":").size > 1) {
             // ??? (possibly to do with looping)
             " get"
-        else
+        } else {
+            val paramName = if (it.contains("List<")) {
+                it.substring(5, it.length - 1) + "s"
+            } else {
+                it
+            }
+
             // @Nonnull SchedulePort schedulePort
-            "@Nonnull $it " + it.first().toLowerCase() + it.substring(1, it.length)
+            "@Nonnull $it " + paramName.first().toLowerCase() + paramName.substring(1, paramName.length)
+        }
     }).toSet().toList()
 
     return createParameters(sheetLines.subList(1, sheetLines.size),
