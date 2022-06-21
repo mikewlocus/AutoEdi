@@ -48,6 +48,11 @@
                 </form>
             </td>
             <td>
+                <form id="exportSpecForm" method="get" th:action="@{/specifications/export/{id} (id = ${specification.id})}">
+                    <button type="submit" th:text="Export"></button>
+                </form>
+            </td>
+            <td>
                 <form id="delSpecForm" method="post" th:action="@{/specifications/delete/{id} (id = ${specification.id})}">
                     <button type="button" th:text="Delete" th:attr="onclick=|checkThenDelete('${specification.id}')|"></button>
                 </form>
