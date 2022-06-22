@@ -569,6 +569,10 @@ private void addToSiCommodity(@Nonnull SiCommodity siCommodity,
 }
 
 protected String strSubs(@Nonnull String input, int from, int to) {
+    if(input == null) {
+     return "";
+    }
+     
   return input.substring(from, Math.min(input.length(), to));
 }
 
@@ -695,6 +699,7 @@ fun headerMessageBodyCaller(messageType: String, versionCode: String, sheetLines
         """
         "Coprar" -> """
         this.terminal = terminal;
+      this.messageFunction = MessageFunction.ORIGINAL;
             
         if(coprarType.equals(CoprarType.DISCHARGE)) {
             this.discharge = true;
@@ -1250,6 +1255,13 @@ public List<IntegrationMessageLog> exportBookings(@Nonnull EdiRecipientConnectio
     @Override
     public void setAlternateIftstaType(AlternateIftstaType alternateIftstaType) {
 
+    }
+        """
+        "Coprar" -> """
+            
+
+    public void setEdiRecipientDetail(EdiRecipientConnectionDetail ediCon){
+        this.ediCon = ediCon;
     }
         """
         else -> ""
