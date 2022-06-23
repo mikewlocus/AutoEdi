@@ -432,3 +432,27 @@ tailrec fun generateImportsByLine(sheetLines: List<String>, messageType: String,
         generateImportsByLine(sheetLines.subList(1, sheetLines.size), messageType, versionCode, imports)
     }
 }
+
+/**
+ * Joins together the first and third strings in the input list where the second is a equals comparison.
+ *
+ * This method was created to be used as part of the postprocessing step, immediately prior to the handling of blank and
+ * not blank strings.
+ *
+ * @param splitString The input string, split on if statement regex.
+ * @return The split input, with elements joined together where the join criteria was matched.
+ */
+tailrec fun joinStringsWithEquals(splitString: List<String>, output: List<String> = listOf()) : List<String> {
+    if(splitString.isEmpty()) {
+        return output
+    }
+
+    val elementsInJoin = 3
+
+    return if(splitString.size >= elementsInJoin && (splitString[1] == "== \"" || splitString[1] == "==\"")) {
+        val equalsComparison = "${splitString[0]}.equals(\"${splitString[2]})"
+        joinStringsWithEquals(splitString.subList(elementsInJoin, splitString.size), output + listOf(equalsComparison))
+    } else {
+        joinStringsWithEquals(splitString.subList(1, splitString.size), output + listOf(splitString[0]))
+    }
+}

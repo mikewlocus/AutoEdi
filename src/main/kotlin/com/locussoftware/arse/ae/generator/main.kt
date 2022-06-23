@@ -65,12 +65,12 @@ fun generator(csv: String, fileName: String, fieldsCsv: String) : GeneratorResul
             version,
             identifier
         ) + createHeaderMethod(messageType, version, sheetLines, fields) + creator + code + createInterfaceMethods(messageType) + "\n}"
-        val postProcessed = generated
+        val postProcessed = joinStringsWithEquals(generated
             .replace("(undg)", "UNDG") // Handle unconventional UNDG name
             .replace("UndgNumber", "UNDGNumber") // Handle unconventional UNDG name II
             .replace("setEmsNumber", "setEMSNumber") // Handle unconventional EMS name
             .replace("  ", " ")
-            .split("(?<=(}|== \"\"|==\"\"|!= \"\"|!=\"\"|&&|\\|\\||&& \\(|&&\\(|\\|\\| \\(|if\\()|if \\()|(?=(}|== \"\"|==\"\"|!= \"\"|!=\"\"|&&|\\|\\||&& \\(|\\|\\| \\(|if\\()|if \\()".toRegex())
+            .split("(?<=(}|== \"\"|==\"\"|!= \"\"|!=\"\"|== \"|==\"|!= \"|!=\"|&&|\\|\\||&& \\(|&&\\(|\\|\\| \\(|if\\()|if \\(|\\) \\{)|(?=(}|== \"\"|==\"\"|!= \"\"|!=\"\"|== \"|==\"|!= \"|!=\"|&&|\\|\\||&& \\(|\\|\\| \\(|if\\()|if \\(|\\) \\{)".toRegex()))
             .zipWithNext { a, b ->
                 when (b) {
                     "!= \"\"", "!=\"\"" -> "StringUtils.isNotBlank($a)"
