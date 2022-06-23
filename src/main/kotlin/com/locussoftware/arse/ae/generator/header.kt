@@ -51,6 +51,10 @@ public ${getProcessMethodReturnType(messageType)} process(${defineParams(getHead
         userProfile = UserProfile.createSystemUserProfile(company, entityManager);
     }
     
+    if(smooksController == null) {
+      smooksController = new SmooksController();
+    }
+    
     this.messageFunction = messageFunction;
     this.messagePlatform = ediCon.getMessagePlatform();
     this.ediCon = ediCon;

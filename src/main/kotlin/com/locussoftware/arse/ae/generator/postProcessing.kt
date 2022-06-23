@@ -126,7 +126,7 @@ tailrec fun generateCreatorFunction(messageObjectName: String, sheetLines: List<
                     sheetLines.subList(1, sheetLines.size),
                     fields,
                     standard,
-                    function + listCode + loopCode + segmentGroupVar + "\n\tif(SegmentCounter.getSegmentCount(sg${sgNum + increment}) > 0) {\n\t\tsg${sgNum}s.add(sg${sgNum + increment});\n\t} else { $noSegCode }\n" + loopClosing)
+                    function + listCode + loopCode + segmentGroupVar + "\n\tif(SegmentCounter.getSegmentCount(sg${sgNum + increment}) >= 0) {\n\t\tsg${sgNum}s.add(sg${sgNum + increment});\n\t} else { $noSegCode }\n" + loopClosing)
             }
 
             // messageObjectName.setSegmentGroupX(createSegmentGroupX());

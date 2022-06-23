@@ -242,9 +242,13 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
         }
 
         // Create looping
-        val loopCount = currentLine[LOOP_COLUMN].replace("\r", "")
-        val loopCode = if(loopCount.toIntOrNull() != null) {
-            "\tfor (int loopCount = 0; loopCount < ${loopCount.toInt()}; loopCount++) {\n"
+        val segLoop = currentLine[LOOP_COLUMN].replace("\r", "")
+        val loopCode = if(segLoop.toIntOrNull() != null) {
+            "\tfor (int loopCount = 0; loopCount < ${segLoop.toInt()}; loopCount++) {\n"
+        } else if(segLoop.isNotBlank()) {
+            "\tint ${currentLine[SEGMENT_COLUMN].lowercase()}Count = 0;\n" +
+            generateLoops(segLoop.split(">")) +
+            "\t\tif(${currentLine[SEGMENT_COLUMN].lowercase()}Count++ < ${currentLine[TYPE_COLUMN]}) {\n"
         } else {
             ""
         }
@@ -269,7 +273,7 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
             currentFunctions,
             currentSegmentVariable = currentLine[6].toLowerCase(),
             currentGroup = currentGroup,
-            endOfSegmentCode = if(loopCode.isNotBlank()) "}" else "")
+            endOfSegmentCode = if(loopCode.isNotBlank()) loopCode.split("{").dropLast(1).joinToString("") { "}" } else "")
     }
 
     // End of loose method
