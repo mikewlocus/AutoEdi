@@ -118,4 +118,40 @@ internal class ValidationKtTest {
         kotlin.test.assertFalse(validateRoundBrackets(invalidInputAllClosingBrackets))
     }
 
+    @Test
+    fun testValidateComparators_ValidInput_ShouldReturnTrue() {
+        val input = "[x == y && y==z||z!= a && a > b || b <= a]"
+        kotlin.test.assertTrue(validateComparators(input))
+    }
+
+    @Test
+    fun testValidateComparators_ValidInputFullCondition_ShouldReturnTrue() {
+        val input = "[x == y && y == z || z != a && a > b || b <= a] \$a [c != a] \$b [] \"\""
+        kotlin.test.assertTrue(validateComparators(input))
+    }
+
+    @Test
+    fun testValidateComparators_InvalidInputNotEqualEqual_ShouldReturnFalse() {
+        val input = "[x !== y && y == z || z != a && a > b || b <= a]"
+        kotlin.test.assertFalse(validateComparators(input))
+    }
+
+    @Test
+    fun testValidateComparators_InvalidInputLessEqualEqual_ShouldReturnFalse() {
+        val input = "[x != y && y == z || z != a && a > b || b <== a]"
+        kotlin.test.assertFalse(validateComparators(input))
+    }
+
+    @Test
+    fun testValidateComparators_InvalidInputSingleEqual_ShouldReturnFalse() {
+        val input = "[x != y && y = z || z != a && a > b || b <= a]"
+        kotlin.test.assertFalse(validateComparators(input))
+    }
+
+    @Test
+    fun testValidateComparators_InvalidInputFullCondition_ShouldReturnFalse() {
+        val input = "[x == y && y == z || z != a && a > b || b <= a] \$a [c !== a] \$b [] \"\""
+        kotlin.test.assertFalse(validateComparators(input))
+    }
+
 }

@@ -83,3 +83,13 @@ tailrec fun bracketCount(input: List<Char>, count: Int = 0) : Int {
     // Continue recursion
     return bracketCount(input.subList(1, input.size), newCount)
 }
+
+/**
+ * Validates the comparators of conditionals, ensuring erroneous comparators don't appear in the Java code.
+ *
+ * @param input The code being validated.
+ * @return True if valid, false if not.
+ */
+fun validateComparators(input: String) : Boolean {
+    return true
+}
