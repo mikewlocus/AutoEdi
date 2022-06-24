@@ -14,7 +14,7 @@ enum class ErrorCode(val code: Int, val message: String) {
     INSUFFICIENT_LOOPING_LOGIC(1005, "Variable does not have sufficient looping logic."),
     INCORRECT_NUMBER_OF_PARAMETERS(1006, "Incorrect number of parameters for variable."),
     INCORRECT_NUMBER_OF_SPEECH_MARKS(1007, "Incorrect number of speech marks."),
-    INCORRECT_NUMBER_OF_CONDITIONAL_SIGNS(1008, "Incorrect number of conditional signs.");
+    INCORRECT_COMPARATOR_ERROR(1008, "Incorrect comparator.");
 
     companion object {
         /**
