@@ -323,10 +323,6 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
         val locals = createLocals(currentLine[11].split(";", "{", "}"), fields)
         val nullCheck = createMultiNullCheck(currentLine[11].split(";", "{", "}"), fields)
 
-        if(field == currentLine[VALUE_COLUMN] && field.contains("$")) {
-            errors[rowCount] = ErrorCode.VARIABLE_NOT_FOUND_ERROR.code
-        }
-
         val subStringCode = if(currentLine[9].isNotBlank()) {
             val componentLength = currentLine[TYPE_COLUMN].toIntOrNull() ?: getComponentLength(standard)
             val lowerBound = (Integer.valueOf(currentLine[9]) - 1) * componentLength

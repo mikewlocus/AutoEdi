@@ -16,6 +16,11 @@ fun getFields(inputFields: String, allFields: List<String>) : String {
     // Gets the code for the field
     val fieldCode = getFieldOrNull(fieldsIn[0].replace("\r", "").trim('}', ' '), allFields)
 
+    // Add error if not found
+    if(fieldCode == null && inputFields.contains("$")) {
+        errors[rowCount] = ErrorCode.VARIABLE_NOT_FOUND_ERROR.code
+    }
+
     // Lone field; base case
     if(fieldsIn.size == 1) {
         // Return the field's code, or the variable if the code is null (not found)
