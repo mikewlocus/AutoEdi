@@ -1,5 +1,7 @@
 package com.locussoftware.arse.ae.generator
 
+import kotlin.math.min
+
 /**
  * Validates the code to ensure any square brackets would not cause errors in the output.
  *
@@ -91,5 +93,31 @@ tailrec fun bracketCount(input: List<Char>, count: Int = 0) : Int {
  * @return True if valid, false if not.
  */
 fun validateComparators(input: String) : Boolean {
-    return true
+    return walkCondition(input.toCharArray().toList())
+}
+
+/**
+ * Walks along the condition, character by character, validating comparators based on nearby characters.
+ *
+ * @param input The input string, split into characters.
+ * @return True if no issues found, otherwise false.
+ */
+tailrec fun walkCondition(input: List<Char>, withinCondition: Boolean = false) : Boolean {
+    if(input.isEmpty()) {
+        return true
+    }
+
+    return when(input.first()) {
+        '[' -> walkCondition(input.subList(1, input.size), true)
+        ']' -> walkCondition(input.subList(1, input.size), false)
+        '=' -> if(withinCondition && input.size > 1 && input[1] != '=')
+            false
+        else
+            walkCondition(input.subList(min(input.size, 2), input.size), withinCondition)
+        '!', '>', '<' -> if(withinCondition && input.size > 2 && input[2] == '=')
+            false
+        else
+            walkCondition(input.subList(min(input.size, 3), input.size), withinCondition)
+        else -> walkCondition(input.subList(1, input.size), withinCondition)
+    }
 }
