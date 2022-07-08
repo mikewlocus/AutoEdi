@@ -577,7 +577,7 @@ protected String strSubs(@Nonnull String input, int from, int to) {
      return "";
     }
      
-  return input.substring(from, Math.min(input.length(), to));
+    return input.substring(Math.min(from, input.length()), Math.min(input.length(), Math.max(from, to)));
 }
 
 protected UNB41 createHeaderUNB(@Nonnull IntegrationMessageLog integrationMessageLog) {

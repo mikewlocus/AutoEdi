@@ -311,7 +311,7 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
         // Check for conditional syntax
         if(currentLine[11].isNotEmpty() && currentLine[11].toCharArray()[0] == '[') {
             val splitCond = currentLine[11].split("[", "]")
-            val conditional = createConditional(splitCond.subList(1, splitCond.size), if(currentLine[7] != "") { currentSegmentVariable } else { currentVariable } + ".set${createObjectType(currentLine[8], currentLine[10], standard)}${currentLine[9]}(" + createTypeParse(currentLine[12]), fields, fieldCloser = if(createTypeParse(currentLine[12]) != "") ")" else "")
+            val conditional = createConditional(splitCond.subList(1, splitCond.size), if(currentLine[7] != "") { currentSegmentVariable } else { currentVariable } + ".set${createObjectType(currentLine[8], currentLine[10], standard)}${currentLine[9]}(" + createTypeParse(currentLine[12]), currentLine, standard, fields, fieldCloser = if(createTypeParse(currentLine[12]) != "") ")" else "")
 
             return generateEdiCode(sheetLines.subList(1, sheetLines.size),
                 fields,
@@ -328,10 +328,10 @@ tailrec fun generateEdiCode(sheetLines: List<String>,
         val locals = createLocals(currentLine[11].split(";", "{", "}"), fields)
         val nullCheck = createMultiNullCheck(currentLine[11].split(";", "{", "}"), fields)
 
-        val subStringCode = if(currentLine[9].isNotBlank()) {
+        val subStringCode = if(currentLine[COMPONENT_COLUMN].isNotBlank()) {
             val componentLength = currentLine[TYPE_COLUMN].toIntOrNull() ?: getComponentLength(standard)
-            val lowerBound = (Integer.valueOf(currentLine[9]) - 1) * componentLength
-            val upperBound = Integer.valueOf(currentLine[9]) * componentLength
+            val lowerBound = (Integer.valueOf(currentLine[COMPONENT_COLUMN]) - 1) * componentLength
+            val upperBound = Integer.valueOf(currentLine[COMPONENT_COLUMN]) * componentLength
             ".replace(\"\\r\\n\", \" \").substring($lowerBound < String.valueOf($field.replace(\"\\r\\n\", \" \")).length() ? $lowerBound : 0, $upperBound < String.valueOf($field.replace(\"\\r\\n\", \" \")).length() ? $upperBound : (String.valueOf($field.replace(\"\\r\\n\", \" \")).length() > $lowerBound ? String.valueOf($field.replace(\"\\r\\n\", \" \")).length() : 0))"
         } else {
             ""

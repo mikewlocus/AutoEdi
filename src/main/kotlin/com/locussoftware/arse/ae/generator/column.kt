@@ -3,6 +3,7 @@ const val SEGMENT_GROUP_COLUMN = 0
 const val SEGMENT_COLUMN = 6
 const val ELEMENT_ID_COLUMN = 7
 const val ELEMENT_SUB_ID_COLUMN = 8
+const val COMPONENT_COLUMN = 9
 const val ELEMENT_COLUMN = 10
 const val VALUE_COLUMN = 11
 const val TYPE_COLUMN = 12

@@ -95,6 +95,8 @@ tailrec fun splitParameters(input: List<Char>, depth: Int = 0, output: List<Stri
  */
 tailrec fun createConditional(conditCode: List<String>,
                               fieldSetter: String,
+                              currentLine: List<String>,
+                              standard: String,
                               fields: List<String>,
                               conditional: String = "",
                               fieldCloser: String = "",
@@ -126,8 +128,17 @@ tailrec fun createConditional(conditCode: List<String>,
     val localsString = if(locals != "") "$locals\t\t" else ""
     // ...if(schedulePort != null) {...
     val nullCheckString = if (nullCheck != "") "if(${nullCheck}) {\n\t\t\t" else ""
+    val field = getFields(conditCode[1], fields)
+    val subStringCode = if(currentLine[COMPONENT_COLUMN].isNotBlank()) {
+        val componentLength = currentLine[TYPE_COLUMN].toIntOrNull() ?: getComponentLength(standard)
+        val lowerBound = (Integer.valueOf(currentLine[COMPONENT_COLUMN]) - 1) * componentLength
+        val upperBound = Integer.valueOf(currentLine[COMPONENT_COLUMN]) * componentLength
+        ".replace(\"\\r\\n\", \" \").substring($lowerBound < String.valueOf($field.replace(\"\\r\\n\", \" \")).length() ? $lowerBound : 0, $upperBound < String.valueOf($field.replace(\"\\r\\n\", \" \")).length() ? $upperBound : (String.valueOf($field.replace(\"\\r\\n\", \" \")).length() > $lowerBound ? String.valueOf($field.replace(\"\\r\\n\", \" \")).length() : 0))"
+    } else {
+        ""
+    }
     // ...tdt.setTransportIdentifier(x);...
-    val fieldString = fieldSetter + getFields(conditCode[1], fields) + fieldCloser + if(!inline) ");" else ""
+    val fieldString = fieldSetter + field + subStringCode + fieldCloser + if(!inline) ");" else ""
     // ...}...
     val nullCheckCloser = if (nullCheck != "") "\n\t\t}" else ""
 
@@ -147,6 +158,8 @@ tailrec fun createConditional(conditCode: List<String>,
 
         createConditional(conditCode.subList(2, conditCode.size),
             fieldSetter,
+            currentLine,
+            standard,
             fields,
             conditional + ifCode,
             fieldCloser,
@@ -163,6 +176,8 @@ tailrec fun createConditional(conditCode: List<String>,
 
             createConditional(conditCode.subList(2, conditCode.size),
                 fieldSetter,
+                currentLine,
+                standard,
                 fields,
                 conditional + elseCode,
                 fieldCloser,
@@ -177,6 +192,8 @@ tailrec fun createConditional(conditCode: List<String>,
 
             createConditional(conditCode.subList(2, conditCode.size),
                 fieldSetter,
+                currentLine,
+                standard,
                 fields,
                 conditional + elseifCode,
                 fieldCloser,
@@ -393,8 +410,9 @@ tailrec fun createLocals(inputFields: List<String>, fields: List<String>, locals
     }
 
     // Get the local variables for this field, if they exist
-    val fieldLocals = if(getLocalOrNull(inputFields[0], fields) != null)
-        getLocalOrNull(inputFields[0], fields) + ";\n"
+    val localOrNull = getLocalOrNull(inputFields[0], fields) ?: ""
+    val fieldLocals = if(localOrNull.isNotBlank())
+        "$localOrNull;\n"
     else
         ""
 
