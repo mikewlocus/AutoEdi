@@ -450,7 +450,18 @@ tailrec fun joinStringsWithEquals(splitString: List<String>, output: List<String
     val elementsInJoin = 3
 
     return if(splitString.size >= elementsInJoin && (splitString[1] == "== \"" || splitString[1] == "==\"")) {
-        val equalsComparison = "${splitString[0]}.equals(\"${splitString[2]})"
+        val equalsComparison = if(splitString[2] == "\"") {
+            "StringUtils.isBlank(${splitString[0]})"
+        } else {
+            "${splitString[0]}.equals(\"${splitString[2]})"
+        }
+        joinStringsWithEquals(splitString.subList(elementsInJoin, splitString.size), output + listOf(equalsComparison))
+    } else if(splitString.size >= elementsInJoin && (splitString[1] == "!= \"" || splitString[1] == "!=\"")) {
+        val equalsComparison = if(splitString[2] == "\"") {
+            "StringUtils.isNotBlank(${splitString[0]})"
+        } else {
+            "!${splitString[0]}.equals(\"${splitString[2]})"
+        }
         joinStringsWithEquals(splitString.subList(elementsInJoin, splitString.size), output + listOf(equalsComparison))
     } else {
         joinStringsWithEquals(splitString.subList(1, splitString.size), output + listOf(splitString[0]))
