@@ -101,7 +101,7 @@ fun isNotUNSegment(segmentCode: String): Boolean {
  * @param elementName The name of the element.
  * @return Either the value of the found element, or a blank string.
  */
-tailrec fun getValueForElement(sheetLines: List<String>, fields: List<String>, elementName: String): String {
+tailrec fun getValueForElement(sheetLines: List<String>, fields: List<String>, elementName: String, standard: String): String {
     return if(sheetLines.isEmpty() || sheetLines[0].split(",").size <= VALUE_COLUMN) {
         // Not found
         "\"\""
@@ -117,7 +117,7 @@ tailrec fun getValueForElement(sheetLines: List<String>, fields: List<String>, e
                 if(currentLine[VALUE_COLUMN].isNotEmpty() && currentLine[VALUE_COLUMN].toCharArray()[0] == '[') {
                     val splitCond = currentLine[VALUE_COLUMN].split("[", "]")
 
-                    createConditional(splitCond.subList(1, splitCond.size), "", fields, inline = true)
+                    createConditional(splitCond.subList(1, splitCond.size), "", currentLine, standard, fields, inline = true)
                 } else {
                     getFields(currentLine[VALUE_COLUMN], fields)
                 }
@@ -131,7 +131,7 @@ tailrec fun getValueForElement(sheetLines: List<String>, fields: List<String>, e
             }
         } else {
             // Carry on searching
-            getValueForElement(sheetLines.subList(1, sheetLines.size), fields, elementName)
+            getValueForElement(sheetLines.subList(1, sheetLines.size), fields, elementName, standard)
         }
     }
 }

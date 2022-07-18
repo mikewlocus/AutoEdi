@@ -65,7 +65,7 @@ fun generator(csv: String, fileName: String, fieldsCsv: String) : GeneratorResul
             messageType,
             version,
             identifier
-        ) + createHeaderMethod(messageType, version, sheetLines, fields) + creator + code + createInterfaceMethods(messageType) + "\n}"
+        ) + createHeaderMethod(messageType, version, standard, sheetLines, fields) + creator + code + createInterfaceMethods(messageType) + "\n}"
         val postProcessed = joinStringsWithEquals(generated
             .replace("(undg)", "UNDG") // Handle unconventional UNDG name
             .replace("UndgNumber", "UNDGNumber") // Handle unconventional UNDG name II

@@ -90,7 +90,23 @@ tailrec fun generateCreatorFunction(messageObjectName: String, sheetLines: List<
     val currentLine = sheetLines[0].split(",")
     val segGroupLength = segmentGroupLength(sheetLines.subList(1, sheetLines.size), plusColumn(currentLine))
 
-    val loopLogic = currentLine[13].replace("\r", "").split(">")
+    val segCondition: String?
+    val segConditionClose: String?
+    val loopLogic: List<String>
+
+    // Get input from the looping logic column, splitting on the looping condition if necessary
+    if(currentLine[LOOP_COLUMN].contains("]")) {
+        val splitLogic = currentLine[LOOP_COLUMN].trim('"').split("]")
+
+        segCondition = "if(" + createConditionWithChecks(splitLogic.first().trim('[').split("(?<=(&&|\\|\\|))|(?=(&&|\\|\\|))".toRegex()), fields) + ") {"
+        segConditionClose = "}"
+        loopLogic = splitLogic[1].replace("\r", "").split(">")
+    } else {
+        segCondition = null
+        segConditionClose = null
+        loopLogic = currentLine[LOOP_COLUMN].replace("\r", "").split(">")
+    }
+
     val loopCode = if(loopLogic.size > 1) {
         generateLoops(loopLogic)
     } else {
@@ -126,11 +142,11 @@ tailrec fun generateCreatorFunction(messageObjectName: String, sheetLines: List<
                     sheetLines.subList(1, sheetLines.size),
                     fields,
                     standard,
-                    function + listCode + loopCode + segmentGroupVar + "\n\tif(SegmentCounter.getSegmentCount(sg${sgNum + increment}) >= 0) {\n\t\tsg${sgNum}s.add(sg${sgNum + increment});\n\t} else { $noSegCode }\n" + loopClosing)
+                    function + listCode + (segCondition ?: "") + loopCode + segmentGroupVar + "\n\tif(SegmentCounter.getSegmentCount(sg${sgNum + increment}) >= 0) {\n\t\tsg${sgNum}s.add(sg${sgNum + increment});\n\t} else { $noSegCode }\n" + loopClosing + (segConditionClose ?: ""))
             }
 
             // messageObjectName.setSegmentGroupX(createSegmentGroupX());
-            return generateCreatorFunction(messageObjectName, sheetLines.subList(1, sheetLines.size), fields, standard, function + loopCode + "\t${messageObjectName.toLowerCase()}.setSegmentGroup${sgNum}(createSegmentGroup${sgNum}(${(createParameters(sheetLines.subList(1, segGroupLength), fields) + listOf("  ++count${sgNum}")).joinToString(", "){ it.split(" ")[2] }}));${System.lineSeparator()}" + loopClosing)
+            return generateCreatorFunction(messageObjectName, sheetLines.subList(1, sheetLines.size), fields, standard, function + (segCondition ?: "") + loopCode + "\t${messageObjectName.toLowerCase()}.setSegmentGroup${sgNum}(createSegmentGroup${sgNum}(${(createParameters(sheetLines.subList(1, segGroupLength), fields) + listOf("  ++count${sgNum}")).joinToString(", "){ it.split(" ")[2] }}));${System.lineSeparator()}" + loopClosing + (segConditionClose ?: ""))
         }
     }
 

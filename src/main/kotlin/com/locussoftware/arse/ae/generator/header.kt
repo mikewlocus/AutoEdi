@@ -1,7 +1,10 @@
 /**
  * Creates the top-level header methods of the message class
  */
-fun createHeaderMethod(messageType: String, versionCode: String, sheetLines: List<String>, fields: List<String>) : String {
+fun createHeaderMethod(messageType: String, versionCode: String, standard: String, sheetLines: List<String>, fields: List<String>) : String {
+
+    val messageCreationCheck = createConditionWithChecks(getValueForElement(sheetLines, fields, "UNB", standard).trim('[', ']').split("(?<=(&&|\\|\\|))|(?=(&&|\\|\\|))".toRegex()), fields)
+
     return """     
 @In
 private EntityManager entityManager;
@@ -62,7 +65,7 @@ public ${getProcessMethodReturnType(messageType)} process(${defineParams(getHead
     this.cdma = new CustomDataMappingAction();
     cdma.setMappingPartyCode(this.ediCon.getMappingCode());
     
-    if(!${createConditionWithChecks(getValueForElement(sheetLines, fields, "UNB").trim('[', ']').split("(?<=(&&|\\|\\|))|(?=(&&|\\|\\|))".toRegex()), fields)}) {
+    if(!${if(messageCreationCheck.isBlank()) true else messageCreationCheck}) {
         return null;
     }
 
@@ -583,27 +586,27 @@ protected String strSubs(@Nonnull String input, int from, int to) {
 protected UNB41 createHeaderUNB(@Nonnull IntegrationMessageLog integrationMessageLog) {
     UNB41 unb = new UNB41();
     SyntaxIdentifier si = new SyntaxIdentifier();
-    si.setId(${getValueForElement(sheetLines, fields, "0001")});
-    si.setVersionNum(${getValueForElement(sheetLines, fields, "0002")});
+    si.setId(${getValueForElement(sheetLines, fields, "0001", standard)});
+    si.setVersionNum(${getValueForElement(sheetLines, fields, "0002", standard)});
     unb.setSyntaxIdentifier(si);
-    unb.setRecipient(createParty(${getValueForElement(sheetLines, fields, "0010")}, ${getValueForElement(sheetLines, fields, "0007")}, ${getValueForElement(sheetLines, fields, "0014")}));
-    unb.setSender(createParty(${getValueForElement(sheetLines, fields, "0004")}, ${getValueForElement(sheetLines, fields, "0007")}, ${getValueForElement(sheetLines, fields, "0008")}));
+    unb.setRecipient(createParty(${getValueForElement(sheetLines, fields, "0010", standard)}, ${getValueForElement(sheetLines, fields, "0007", standard)}, ${getValueForElement(sheetLines, fields, "0014", standard)}));
+    unb.setSender(createParty(${getValueForElement(sheetLines, fields, "0004", standard)}, ${getValueForElement(sheetLines, fields, "0007", standard)}, ${getValueForElement(sheetLines, fields, "0008", standard)}));
     unb.setDate(createDateTime(new Date()));
-    unb.setControlRef(${getValueForElement(sheetLines, fields, "0020")});
-    unb.setApplicationRef(${getValueForElement(sheetLines, fields, "0026")});
-    unb.setProcessingPriorityCode(${getValueForElement(sheetLines, fields, "0029")});
+    unb.setControlRef(${getValueForElement(sheetLines, fields, "0020", standard)});
+    unb.setApplicationRef(${getValueForElement(sheetLines, fields, "0026", standard)});
+    unb.setProcessingPriorityCode(${getValueForElement(sheetLines, fields, "0029", standard)});
     return unb;
 }
 
 protected UNH41 createHeaderUNH(@Nonnull IntegrationMessageLog integrationMessageLog) {
     UNH41 unh = new UNH41();
     MessageIdentifier mi = new MessageIdentifier();
-    unh.setMessageRefNum(${getValueForElement(sheetLines, fields, "0062")});
-    mi.setId(${getValueForElement(sheetLines, fields, "0065")});
-    mi.setVersionNum(${getValueForElement(sheetLines, fields, "0052")});
-    mi.setReleaseNum(${getValueForElement(sheetLines, fields, "0054")});
-    mi.setControllingAgencyCode(${getValueForElement(sheetLines, fields, "0051")});
-    mi.setAssociationAssignedCode(${getValueForElement(sheetLines, fields, "0057")});
+    unh.setMessageRefNum(${getValueForElement(sheetLines, fields, "0062", standard)});
+    mi.setId(${getValueForElement(sheetLines, fields, "0065", standard)});
+    mi.setVersionNum(${getValueForElement(sheetLines, fields, "0052", standard)});
+    mi.setReleaseNum(${getValueForElement(sheetLines, fields, "0054", standard)});
+    mi.setControllingAgencyCode(${getValueForElement(sheetLines, fields, "0051", standard)});
+    mi.setAssociationAssignedCode(${getValueForElement(sheetLines, fields, "0057", standard)});
     unh.setMessageIdentifier(mi);
     return unh;
 }
@@ -781,6 +784,10 @@ fun headerMessageBodyCaller(messageType: String, versionCode: String, sheetLines
         "Iftsta" -> """
           Booking eventBook = containerEvent.getBooking();
           ContainerEventType eventType = containerEvent.getEventType();
+
+         if(eventBook == null) {
+             eventBook = BaseUtilityMethods.getBookingFromContainerEventReference(containerEvent);
+         }
     
           if(containerEvent.getVoyage() != null) {
               // Get directly from event voyage if populated
@@ -873,12 +880,12 @@ fun integrationMessageLogCreator(messageType: String): String {
 		UnLocode loc = null;
 		String desc = desc= String.format("Cuscar for Voyage %s to Partner %s",voyage.getVoyageNumber(), ediCon.getConnectionName());
 		if(schedulePort!=null){
-			CompanyAssociation ca = AgentAction.getInstance().getPortAgent(company, port.getUnLocode());
+			CompanyAssociation ca = AgentAction.getInstance().getPortAgent(company, schedulePort.getUnLocode());
 			if(ca!=null){
 				reportingAgent = ca.getCompanyByAgentId();
 			}
 			loc = schedulePort.getUnLocode();
-			desc= String.format("Cuscar on Voyage %s for Port %s to Partner %s",port.getOutboundVoyageNumber() ,schedulePort.getUnLocode(), ediCon.getConnectionName());
+			desc= String.format("Cuscar on Voyage %s for Port %s to Partner %s",schedulePort.getOutboundVoyageNumber() ,schedulePort.getUnLocode(), ediCon.getConnectionName());
 		}
         """
         else -> """
