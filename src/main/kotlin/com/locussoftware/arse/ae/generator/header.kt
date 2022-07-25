@@ -567,6 +567,20 @@ protected void checkTerminal(@Nonnull List<ShippingInstruction> siList, @Nonnull
  }
 }
 
+protected boolean wasPreviouslyOutsideEu(@Nonnull Voyage voyage, @Nonnull SchedulePort schedulePort) {
+  List<SchedulePort> ports = voyage.getVisitedPorts();
+  
+  for(SchedulePort port : ports) {
+    if(!port.getUnLocode().getCountryCode().isInEurope()) {
+      return false;
+    } else if(port.equals(schedulePort)) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
 private void addToSiCommodity(@Nonnull SiCommodity siCommodity,
                               @Nonnull SiContainerCommodityList siccl,
                               @Nonnull SiContainerAllocation sica) {

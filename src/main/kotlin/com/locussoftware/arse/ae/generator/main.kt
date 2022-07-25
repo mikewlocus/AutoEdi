@@ -10,68 +10,91 @@ var errors: HashMap<Int, Int> = hashMapOf()
 var rowCount: Int = 0
 
 /**
+ * The entry point for the EDI message class generator.
+ *
+ * @param csv The input specification, as a CSV string.
+ * @param fileName The filename for the output message class.
+ * @param fieldsCsv The variables table, as a CSV string.
+ * @return A generator result, containing the generated file path and errors encountered in generation.
  * @author Mike Wayne
  */
-fun generator(csv: String, fileName: String, fieldsCsv: String) : GeneratorResult {
+fun generator(csv: String, fileName: String, fieldsCsv: String, standards: String) : GeneratorResult {
 
+    // Reset the error map with every generation
     errors = hashMapOf()
 
     val fileNameSplit = fileName.split(".")
     val fileNameSplitUnderscores = fileName.split("_")
 
-    // Validate file (CSV, Name_Standard)
+    // Validate file name is Name_Standard_..., e.g. COPARN_D95B
     if(fileNameSplitUnderscores.size >= 2) {
-
-        // Get values from file
-        val inputCsv = csv
-
-        val messageType = fileName[0].toUpperCase() + fileNameSplitUnderscores[0].substring(1).toLowerCase()
-        val version = fileNameSplitUnderscores[1].toUpperCase().split(".")[0]
+        // Get the message type from the file name
+        val messageType = fileName[0].uppercase() + fileNameSplitUnderscores[0].substring(1).lowercase()
+        // Get the message version from the second split of the file name
+        val version = fileNameSplitUnderscores[1].uppercase().split(".")[0]
+        // Set the message standard based on the version; this is to handle Smooks' different naming conventions
         val standard = when (version) {
             "D95B" -> "D95B"
             "D16A" -> "D16A"
             else -> "D00B"
         }
+        // The "name" of the specification, often the company who the message class is used to communicate with.
         val identifier = if(fileNameSplitUnderscores.size > 2) { fileNameSplitUnderscores[2].split(".")[0] } else { "" }
 
         // Split and clean file content
-        val sheetLines = preprocess(inputCsv.split(System.lineSeparator()))
-        val fields = fieldsCsv
-                .replace("\"\"", "&dQuot1653061221")
-                .replace("\"", "")
-                .replace("&dQuot1653061221", "\"")
-                .split(System.lineSeparator())
+        val sheetLines = preprocess(csv.split(System.lineSeparator()))
 
-        println("Preprocessed input: \n${sheetLines.joinToString("\n")}\n")
+        // Sort out speech marks in fields CSV
+        val quoteString = "&dQuot1653061221"
+        val fields = fieldsCsv
+                .replace("\"\"", quoteString)
+                .replace("\"", "")
+                .replace(quoteString, "\"")
+                .split(System.lineSeparator())
 
         // Build file from generated code
         val code = generateEdiCode(sheetLines, fields, standard)
-        val creator = segCounters(
+        // Generate top-level creator function, with segment counters and function definition
+        val segCounters = segCounters(
             sheetLines,
             standard
-        ) + "protected $messageType create${messageType}(@Nonnull IntegrationMessageLog integrationMessageLog, ${
+        )
+        val functionDefinition = "protected $messageType create${messageType}(@Nonnull IntegrationMessageLog integrationMessageLog, ${
             getCreatorParams(
                 messageType
             ).joinToString(", ") { "@Nonnull $it" }
-        }) throws IllegalAccessException, OdysseyException {${System.lineSeparator()}\t${messageType} ${messageType.toLowerCase()} = new ${messageType}();${System.lineSeparator()}" + generateCreatorFunction(
+        }) throws IllegalAccessException, OdysseyException {${System.lineSeparator()}" +
+                "\t${messageType} ${messageType.toLowerCase()} = new ${messageType}();${System.lineSeparator()}"
+
+        val creatorBody = generateCreatorFunction(
             messageType,
             sheetLines,
             fields,
             standard
         )
+        val creator = segCounters + functionDefinition + creatorBody
 
         // Output generated code
-        val generated = generateImports(sheetLines, messageType, version) + createClassDeclaration(
+        val imports = generateImports(sheetLines, messageType, version) + createClassDeclaration(
             messageType,
             version,
             identifier
-        ) + createHeaderMethod(messageType, version, standard, sheetLines, fields) + creator + code + createInterfaceMethods(messageType) + "\n}"
+        )
+        val headerMethod = createHeaderMethod(messageType, version, standard, sheetLines, fields)
+        val interfaceMethods = createInterfaceMethods(messageType)
+        val classCloser = "\n}"
+        val generated = imports + headerMethod + creator + code + interfaceMethods + classCloser
+
+        // Postprocess the code, to remove any generation inefficiencies
+        val conditionalSplitRegex = "(?<=(}|== \"\"|==\"\"|!= \"\"|!=\"\"|== \"|==\"|!= \"|!=\"|&&|\\|\\||&& \\(|&&\\(|\\|\\| \\(|if\\()|if \\(|\\) \\{)|(?=(}|== \"\"|==\"\"|!= \"\"|!=\"\"|== \"|==\"|!= \"|!=\"|&&|\\|\\||&& \\(|\\|\\| \\(|if\\()|if \\(|\\) \\{)".toRegex()
         val postProcessed = joinStringsWithEquals(generated
             .replace("(undg)", "UNDG") // Handle unconventional UNDG name
-            .replace("UndgNumber", "UNDGNumber") // Handle unconventional UNDG name II
-            .replace("setEmsNumber", "setEMSNumber") // Handle unconventional EMS name
-            .replace("  ", " ")
-            .split("(?<=(}|== \"\"|==\"\"|!= \"\"|!=\"\"|== \"|==\"|!= \"|!=\"|&&|\\|\\||&& \\(|&&\\(|\\|\\| \\(|if\\()|if \\(|\\) \\{)|(?=(}|== \"\"|==\"\"|!= \"\"|!=\"\"|== \"|==\"|!= \"|!=\"|&&|\\|\\||&& \\(|\\|\\| \\(|if\\()|if \\(|\\) \\{)".toRegex()))
+            .replace("UndgNumber", "UNDGNumber") // Handle uncapitalised UNDG number
+            .replace("setEmsNumber", "setEMSNumber") // Handle uncapitalised EMS number
+            .replace("  ", " ") // Get rid of double spaces
+            .split(conditionalSplitRegex)
+        )
+                // Handle replacement of string comparators
             .zipWithNext { a, b ->
                 when (b) {
                     "!= \"\"", "!=\"\"" -> "StringUtils.isNotBlank($a)"
@@ -82,11 +105,11 @@ fun generator(csv: String, fileName: String, fieldsCsv: String) : GeneratorResul
                     }
                 }
             }
-            .joinToString("") // Replace raw string comparison with StringUtils ('}' added to split, as zipWithNext ignores the final element)
+            .joinToString("")
 
-        println(postProcessed)
-
-        val file = File("Process${messageType}${version}$identifier.java")
+        // Save the output file
+        val outputFilePath = "Process${messageType}${version}$identifier.java"
+        val file = File(outputFilePath)
 
         // Create new file if it doesn't already exist
         if(!file.exists()) {
@@ -94,16 +117,16 @@ fun generator(csv: String, fileName: String, fieldsCsv: String) : GeneratorResul
         }
 
         // Write output to file
-        File("Process${messageType}${version}$identifier.java").printWriter().use { out ->
+        File(outputFilePath).printWriter().use { out ->
             out.println(postProcessed)
         }
 
-        return GeneratorResult("Process${messageType}${version}$identifier.java", errors)
+        return GeneratorResult(outputFilePath, errors)
     }
 
+    // Generator passed improperly formatted values TODO: throw an exception instead
     return GeneratorResult("", errors)
 }
-
 
 /**
  * The main generator function for the message class. This function analyses the input CSV line-by-line, in order to produce the body of the message class.
